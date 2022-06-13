@@ -1,4 +1,4 @@
-import { Stack } from "./Stack";
+import { stack } from "./stack";
 import { App } from "@serverless-stack/resources";
 
 export default function (app: App) {
@@ -9,5 +9,5 @@ export default function (app: App) {
       format: "esm",
     },
   });
-  app.stack(Stack);
+  app.stack(stack);
 }
