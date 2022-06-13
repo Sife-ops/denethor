@@ -1,4 +1,4 @@
-import { StackContext, Api, GraphQLApi } from "@serverless-stack/resources";
+import { StackContext, GraphQLApi } from "@serverless-stack/resources";
 
 export function Stack({ stack }: StackContext) {
   const api = new GraphQLApi(stack, "GraphqlApi", {
