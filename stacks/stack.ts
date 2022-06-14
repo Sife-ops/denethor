@@ -8,7 +8,24 @@ import {
 const { DOMAIN, SUBDOMAIN } = process.env;
 
 export function stack({ stack }: StackContext) {
+  const cognitoAuth = new Auth(stack, "cognitoAuth", {
+    login: ["email"],
+  });
+
   const graphqlApi = new GraphQLApi(stack, "graphqlApi", {
+    authorizers: {
+      jwt: {
+        type: "user_pool",
+        userPool: {
+          id: cognitoAuth.userPoolId,
+          clientIds: [cognitoAuth.userPoolClientId],
+        },
+      },
+    },
+    defaults: {
+      // todo: can use 'iam'?
+      authorizer: "jwt",
+    },
     server: {
       handler: "functions/lambda.handler",
       bundle: {
@@ -17,9 +34,6 @@ export function stack({ stack }: StackContext) {
     },
   });
 
-  const cognitoAuth = new Auth(stack, "cognitoAuth", {
-    login: ["email"],
-  });
   cognitoAuth.attachPermissionsForAuthUsers([graphqlApi]);
 
   const reactSite = new ReactStaticSite(stack, "reactSite", {

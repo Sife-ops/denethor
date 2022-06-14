@@ -1,10 +1,7 @@
-// import "./App.css";
-// import React from "react";
-// import logo from "./logo.svg";
-import { Dev } from "./component/dev";
 import "./App.css";
 import React from "react";
 import { Auth } from "aws-amplify";
+import { Dev } from "./component/dev";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { SignIn } from "./component/sign-in";
 import { SignUp } from "./component/sign-up";
