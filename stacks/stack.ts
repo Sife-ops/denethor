@@ -3,11 +3,27 @@ import {
   GraphQLApi,
   ReactStaticSite,
   StackContext,
+  Table,
 } from "@serverless-stack/resources";
 
 const { DOMAIN, SUBDOMAIN } = process.env;
 
 export function stack({ stack }: StackContext) {
+  const table = new Table(stack, "table", {
+    fields: {
+      pk: "string",
+      sk: "string",
+      bookmark: "string",
+    },
+    primaryIndex: { partitionKey: "pk", sortKey: "sk" },
+    globalIndexes: {
+      categoryBookmarkIndex: {
+        partitionKey: "bookmark",
+        sortKey: "sk",
+      },
+    },
+  });
+
   const cognitoAuth = new Auth(stack, "cognitoAuth", {
     login: ["email"],
   });
@@ -25,6 +41,11 @@ export function stack({ stack }: StackContext) {
     defaults: {
       // todo: can use 'iam'?
       authorizer: "jwt",
+      function: {
+        environment: {
+          tableName: table.tableName,
+        },
+      },
     },
     server: {
       handler: "functions/lambda.handler",
@@ -56,6 +77,7 @@ export function stack({ stack }: StackContext) {
     GraphqlApiEndpoint: graphqlApi.url,
     IdentityPoolId: cognitoAuth.cognitoIdentityPoolId || "",
     ReactSiteUrl: reactSite.url,
+    Table: table.tableName,
     UserPoolClientId: cognitoAuth.userPoolClientId,
     UserPoolId: cognitoAuth.userPoolId,
   });
