@@ -4,7 +4,9 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { Amplify } from "aws-amplify";
 import { BrowserRouter } from "react-router-dom";
+import { createClient } from "urql";
 
+// todo: move to file
 const env = {
   apiGateway: {
     REGION: process.env.REACT_APP_REGION,
@@ -36,6 +38,9 @@ Amplify.configure({
     ],
   },
 });
+
+// const client = createClient({
+// })
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
