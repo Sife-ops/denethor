@@ -4,7 +4,8 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { Amplify } from "aws-amplify";
 import { BrowserRouter } from "react-router-dom";
-import { createClient } from "urql";
+import { Provider as UrqlProvider, createClient } from "urql";
+import { getAccessToken } from "./token";
 
 // todo: move to file
 const env = {
@@ -20,6 +21,11 @@ const env = {
   },
 };
 
+// todo: check everything, or definitions for env
+if (!env.apiGateway.URL) {
+  throw new Error("undefined");
+}
+
 Amplify.configure({
   Auth: {
     mandatorySignIn: true,
@@ -28,28 +34,30 @@ Amplify.configure({
     identityPoolId: env.cognito.IDENTITY_POOL_ID,
     userPoolWebClientId: env.cognito.USER_POOL_CLIENT_ID,
   },
-  API: {
-    endpoints: [
-      {
-        name: "temp",
-        endpoint: env.apiGateway.URL,
-        region: env.apiGateway.REGION,
-      },
-    ],
-  },
 });
 
-// const client = createClient({
-// })
+const client = createClient({
+  url: env.apiGateway.URL,
+  fetchOptions: () => {
+    const token = getAccessToken();
+    return {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    };
+  },
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   // <React.StrictMode>
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <UrqlProvider value={client}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </UrqlProvider>
   // </React.StrictMode>
 );
 

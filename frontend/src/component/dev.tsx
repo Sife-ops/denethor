@@ -1,20 +1,8 @@
 import React from "react";
-import { Auth } from "aws-amplify";
-import { getAccessToken, setAccessToken } from "../token";
+import { getAccessToken } from "../token";
 
 export const Dev: React.FC = () => {
-  const [disabled, setDisabled] = React.useState(true);
   const [jwt, setJwt] = React.useState("");
-
-  React.useEffect(() => {
-    Auth.currentSession().then((session) => {
-      const jwt = session.getAccessToken().getJwtToken();
-      console.log("jwt", jwt);
-      setJwt(jwt);
-      setAccessToken(jwt);
-      setDisabled(false);
-    });
-  }, []);
 
   return (
     <div>
@@ -29,7 +17,6 @@ export const Dev: React.FC = () => {
 
       <h1>graphql test</h1>
       <button
-        disabled={disabled}
         onClick={() => {
           fetch("https://6aeocxypzd.execute-api.us-east-1.amazonaws.com", {
             method: "POST",

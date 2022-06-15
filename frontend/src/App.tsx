@@ -2,9 +2,11 @@ import "./App.css";
 import React from "react";
 import { Auth } from "aws-amplify";
 import { Dev } from "./component/dev";
+import { Dev2 } from "./component/dev2";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { SignIn } from "./component/sign-in";
 import { SignUp } from "./component/sign-up";
+import { setAccessToken } from "./token";
 
 const Landing: React.FC = () => {
   return <div>landing</div>;
@@ -15,33 +17,23 @@ function App() {
 
   const [isSignedIn, setIsSignedIn] = React.useState(false);
 
-  React.useEffect(() => {
-    async function checkSignedIn() {
-      try {
-        const user = await Auth.currentAuthenticatedUser();
-        localStorage.setItem("userId", user.username);
-        setIsSignedIn(true);
-      } catch (e) {
-        localStorage.removeItem("userId");
-        setIsSignedIn(false);
-      }
-    }
-    checkSignedIn();
-  }, []);
-
   return (
     <div>
       <ul>
         <li onClick={() => nav("/")}>landing</li>
         {isSignedIn ? (
-          <li
-            onClick={async () => {
-              await Auth.signOut();
-              setIsSignedIn(false);
-            }}
-          >
-            sign out
-          </li>
+          <>
+            <li
+              onClick={async () => {
+                await Auth.signOut();
+                setAccessToken("");
+                setIsSignedIn(false);
+              }}
+            >
+              sign out
+            </li>
+            <li onClick={() => nav("/dev2")}>dev2</li>
+          </>
         ) : (
           <>
             <li onClick={() => nav("/signin")}>sign in</li>
@@ -55,6 +47,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/dev" element={<Dev />} />
+          <Route path="/dev2" element={<Dev2 />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       ) : (

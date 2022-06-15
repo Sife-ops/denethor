@@ -1,5 +1,6 @@
 import { Auth } from "aws-amplify";
 import { useState } from "react";
+import { setAccessToken } from "../token";
 
 export const SignIn: React.FC<{
   setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,7 +16,8 @@ export const SignIn: React.FC<{
           e.preventDefault();
           try {
             const res = await Auth.signIn(email, password);
-            console.log(res);
+            console.log(res.signInUserSession.accessToken.jwtToken);
+            setAccessToken(res.signInUserSession.accessToken.jwtToken);
             p.setIsSignedIn(true);
           } catch (e) {
             console.log(e);
