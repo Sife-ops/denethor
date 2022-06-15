@@ -55,6 +55,8 @@ export function stack({ stack }: StackContext) {
     },
   });
 
+  graphqlApi.attachPermissions([table]);
+
   cognitoAuth.attachPermissionsForAuthUsers([graphqlApi]);
 
   const reactSite = new ReactStaticSite(stack, "reactSite", {

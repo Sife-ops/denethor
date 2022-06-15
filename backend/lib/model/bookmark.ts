@@ -31,4 +31,4 @@ const bookmarkSchema = new dynamoose.Schema({
   },
 });
 
-export default entity<BookmarkClass>(bookmarkSchema);
+export const bookmarkModel = entity<BookmarkClass>(bookmarkSchema);

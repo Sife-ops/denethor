@@ -32,4 +32,4 @@ const categorySchema = new dynamoose.Schema({
   },
 });
 
-export default entity<CategoryClass>(categorySchema);
+export const categoryModel = entity<CategoryClass>(categorySchema);
