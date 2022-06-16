@@ -83,19 +83,19 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ event }: { event: APIGatewayEvent }): Context => {
-    const userIdError = new Error("userId undefined");
+    const noAuthHeaderError = new Error("no authorization header");
 
     try {
       const { authorization } = event.headers;
 
       if (!authorization) {
-        throw new Error("no authorization header");
+        throw noAuthHeaderError;
       }
 
       const decoded = jwt_decode<JwtPayload>(authorization);
 
       if (!decoded.sub) {
-        throw userIdError;
+        throw new Error("userId undefined");
       }
 
       return {
@@ -104,11 +104,11 @@ const server = new ApolloServer({
     } catch (error: any) {
       console.log(error.message);
 
-      if (error === userIdError) {
-        throw userIdError;
+      if (error === noAuthHeaderError) {
+        return {};
       }
 
-      return {};
+      throw error;
     }
   },
 
