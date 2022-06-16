@@ -1,6 +1,11 @@
 import React from "react";
-import { useHelloQuery, useCategoryCreateMutation } from "../generated/graphql";
 import { useQuery, useMutation } from "urql";
+
+import {
+  useHelloQuery,
+  useCategoryCreateMutation,
+  useCategoryListQuery,
+} from "../generated/graphql";
 
 const HelloQuery = `
  query HelloQuery {
@@ -34,6 +39,8 @@ export const Dev2: React.FC = () => {
 
   const [categoryCreateRes, categoryCreate] = useCategoryCreateMutation();
 
+  const [categoryListRes] = useCategoryListQuery();
+
   if (fetching) {
     return <div>loading...</div>;
   }
@@ -44,6 +51,15 @@ export const Dev2: React.FC = () => {
 
   return (
     <div>
+      <h1>category list</h1>
+      {categoryListRes.fetching ? (
+        //
+        <div>loading...</div>
+      ) : (
+        //
+        <div>{JSON.stringify(categoryListRes.data, null, 2)}</div>
+      )}
+
       <h1>category create</h1>
       <form
         onSubmit={async (e) => {

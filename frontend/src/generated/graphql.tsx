@@ -47,6 +47,7 @@ export type MutationCategoryCreateArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  categoryList?: Maybe<Array<Maybe<Category>>>;
   hello?: Maybe<Scalars['String']>;
 };
 
@@ -57,6 +58,11 @@ export type CategoryCreateMutationVariables = Exact<{
 
 
 export type CategoryCreateMutation = { __typename?: 'Mutation', categoryCreate?: { __typename?: 'Category', pk?: string | null, sk?: string | null, name?: string | null, description?: string | null } | null };
+
+export type CategoryListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CategoryListQuery = { __typename?: 'Query', categoryList?: Array<{ __typename?: 'Category', pk?: string | null, sk?: string | null, name?: string | null, description?: string | null } | null> | null };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -77,6 +83,20 @@ export const CategoryCreateDocument = gql`
 
 export function useCategoryCreateMutation() {
   return Urql.useMutation<CategoryCreateMutation, CategoryCreateMutationVariables>(CategoryCreateDocument);
+};
+export const CategoryListDocument = gql`
+    query CategoryList {
+  categoryList {
+    pk
+    sk
+    name
+    description
+  }
+}
+    `;
+
+export function useCategoryListQuery(options?: Omit<Urql.UseQueryArgs<CategoryListQueryVariables>, 'query'>) {
+  return Urql.useQuery<CategoryListQuery>({ query: CategoryListDocument, ...options });
 };
 export const HelloDocument = gql`
     query Hello {

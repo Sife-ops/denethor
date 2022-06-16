@@ -31,6 +31,7 @@ const typeDefs = gql`
 
   type Query {
     hello: String
+    categoryList: [Category]
   }
 
   type Mutation {
@@ -52,25 +53,40 @@ const resolvers = {
       console.log(context.userId);
       return `Hello world!`;
     },
+
+    categoryList: async (_: any, __: any, { userId }: Context, ___: any) => {
+      const categories = await model.category
+        .query("pk")
+        .eq(`user:${userId}`)
+        .where("sk")
+        .beginsWith("category:")
+        .exec();
+
+      const response = categories.filter((e) => !e.bookmark);
+
+      console.log(response);
+
+      return response;
+    },
   },
 
   Mutation: {
     categoryCreate: async (
       _: any,
       { description, name }: { description: string; name: string },
-      context: Context,
+      { userId }: Context,
       __: any
     ) => {
-      const res = await model.category.create({
-        pk: `user:${context.userId}`,
+      const response = await model.category.create({
+        pk: `user:${userId}`,
         sk: `category:${crypto.randomUUID()}`,
         name,
         description,
       });
 
-      console.log(res);
+      console.log(response);
 
-      return res;
+      return response;
     },
   },
 };
