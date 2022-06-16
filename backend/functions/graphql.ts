@@ -51,7 +51,7 @@ interface Context {
 
 const resolvers = {
   Query: {
-    hello: (_: any, __: any, context: Context, ___: any) => {
+    hello: (_: any, __: any, context: Context) => {
       console.log(context.userId);
       return `Hello world!`;
     },
@@ -76,8 +76,7 @@ const resolvers = {
     categoryCreate: async (
       _: any,
       { description, name }: { description?: string; name: string },
-      { userId }: Context,
-      __: any
+      { userId }: Context
     ) => {
       const response = await model.category.create({
         pk: `user:${userId}`,
@@ -102,8 +101,7 @@ const resolvers = {
         name: string;
         sk: string;
       },
-      { userId }: Context,
-      __: any
+      { userId }: Context
     ) => {
       if (!name) {
         throw new Error("invalid arguments: name");
@@ -124,8 +122,7 @@ const resolvers = {
     categoryDelete: async (
       _: any,
       { sk }: { sk: string },
-      { userId }: Context,
-      __: any
+      { userId }: Context
     ) => {
       const category = await model.category.get({
         pk: `user:${userId}`,
