@@ -1,0 +1,16 @@
+# todo: use downloaded schema file instead of second api
+# todo: import/first error
+overwrite: true
+schema: "https://fi2fssm4r3.execute-api.us-east-1.amazonaws.com"
+documents: "src/**/*.graphql"
+generates:
+  src/generated/graphql.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "urql-introspection"
+      - "typescript-urql"
+
+  # ./graphql.schema.json:
+  #   plugins:
+  #     - "introspection"

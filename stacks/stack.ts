@@ -39,7 +39,7 @@ export function stack({ stack }: StackContext) {
       },
     },
     defaults: {
-      // todo: can use 'iam'?
+      // todo: use 'iam'?
       authorizer: "jwt",
       function: {
         environment: {
@@ -63,7 +63,7 @@ export function stack({ stack }: StackContext) {
     defaults: {
       function: {
         environment: {
-          tableName: table.tableName,
+          tableName: 'Fhqwhgads',
         },
       },
     },

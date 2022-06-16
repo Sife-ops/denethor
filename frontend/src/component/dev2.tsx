@@ -1,4 +1,5 @@
 import React from "react";
+import { useHelloQuery } from "../generated/graphql";
 import { useQuery, useMutation } from "urql";
 
 const HelloQuery = `
@@ -19,19 +20,17 @@ const CategoryCreateMutation = `
 `;
 
 export const Dev2: React.FC = () => {
+  const [description, setDescription] = React.useState("");
+  const [name, setName] = React.useState("");
+
   const [res, reexec] = useQuery({
     query: HelloQuery,
   });
-
   const { data, fetching, error } = res;
 
   const [_, categoryCreate] = useMutation(CategoryCreateMutation);
 
-  // const [favorite, setFavorite] = React.useState(false);
-  // const [sk, setSk] = React.useState("");
-  // const [url, setUrl] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [name, setName] = React.useState("");
+  const [helloRes, helloReexec] = useHelloQuery();
 
   if (fetching) {
     return <div>loading...</div>;
@@ -43,6 +42,15 @@ export const Dev2: React.FC = () => {
 
   return (
     <div>
+      <h1>codegen test</h1>
+      {helloRes.fetching ? (
+        //
+        <div>loading...</div>
+      ) : (
+        //
+        <div>{JSON.stringify(helloRes)}</div>
+      )}
+
       <h1>category create</h1>
       <form
         onSubmit={async (e) => {
