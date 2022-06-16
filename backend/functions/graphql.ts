@@ -6,11 +6,23 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-co
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
+  type Bookmark {
+    pk: String!
+    sk: String!
+
+    categories: [Category]
+    description: String
+    favorite: Boolean!
+    name: String!
+    url: String!
+  }
+
   type Category {
     pk: String!
     sk: String!
-    name: String!
+
     description: String
+    name: String!
   }
 
   type Query {
@@ -22,6 +34,10 @@ const typeDefs = gql`
   }
 `;
 
+interface Context {
+  userId?: string;
+}
+
 // Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
@@ -32,25 +48,22 @@ const resolvers = {
   },
 
   Mutation: {
-    categoryCreate: async (_: any, args: any, context: any, __: any) => {
-      const a = await model.category.create({
+    categoryCreate: async (
+      _: any,
+      { description, name }: { description: string; name: string },
+      context: Context,
+      __: any
+    ) => {
+      const res = await model.category.create({
         pk: `user:${context.userId}`,
         sk: `category:${crypto.randomUUID()}`,
-        name: args.name,
-        description: args.description,
+        name,
+        description,
       });
 
-      // console.log(args);
-      // console.log(context.userId);
-      console.log(a);
+      console.log(res);
 
-      // return {
-      //   id: "aa",
-      //   name: "aa",
-      //   description: "aa",
-      // };
-
-      return a;
+      return res;
     },
   },
 };
@@ -62,25 +75,25 @@ const server = new ApolloServer({
     event,
     // express,
     // context,
-  }): {
-    userId: string;
-    // event: any;
-    // context: any;
-  } => {
-    const decoded = jwt_decode<JwtPayload>(event.headers.authorization);
+  }): Context => {
+    try {
+      const decoded = jwt_decode<JwtPayload>(event.headers.authorization);
 
-    if (!decoded.sub) {
-      throw new Error("userId undefined");
+      // if (!decoded.sub) {
+      //   throw new Error("userId undefined");
+      // }
+
+      return {
+        userId: decoded.sub,
+        // headers: event.headers,
+        // functionName: context.functionName,
+        // expressRequest: express.req,
+        // event,
+        // context,
+      };
+    } catch {
+      return {};
     }
-
-    return {
-      userId: decoded.sub,
-      // headers: event.headers,
-      // functionName: context.functionName,
-      // expressRequest: express.req,
-      // event,
-      // context,
-    };
   },
 
   // By default, the GraphQL Playground interface and GraphQL introspection

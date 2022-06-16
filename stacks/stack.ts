@@ -48,17 +48,34 @@ export function stack({ stack }: StackContext) {
       },
     },
     server: {
-      handler: "functions/lambda.handler",
+      handler: "functions/graphql.handler",
       bundle: {
         minify: false,
       },
     },
   });
 
-  graphqlApi.attachPermissions([table]);
-
   cognitoAuth.attachPermissionsForAuthUsers([graphqlApi]);
 
+  graphqlApi.attachPermissions([table]);
+
+  const graphqlApiPublic = new GraphQLApi(stack, "graphqlApiPublic", {
+    defaults: {
+      function: {
+        environment: {
+          tableName: table.tableName,
+        },
+      },
+    },
+    server: {
+      handler: "functions/graphql.handler",
+      bundle: {
+        minify: false,
+      },
+    },
+  });
+
+  // todo: migrate to vite
   const reactSite = new ReactStaticSite(stack, "reactSite", {
     path: "frontend",
     environment: {
@@ -77,6 +94,7 @@ export function stack({ stack }: StackContext) {
 
   stack.addOutputs({
     GraphqlApiEndpoint: graphqlApi.url,
+    GraphqlApiPublicEndpoint: graphqlApiPublic.url,
     IdentityPoolId: cognitoAuth.cognitoIdentityPoolId || "",
     ReactSiteUrl: reactSite.url,
     Table: table.tableName,
