@@ -1,0 +1,8 @@
+mutation CategoryUpdate($sk: String!, $name: String!, $description: String) {
+  categoryUpdate(sk: $sk, name: $name, description: $description) {
+    pk
+    sk
+    name
+    description
+  }
+}

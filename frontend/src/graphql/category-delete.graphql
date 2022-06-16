@@ -1,0 +1,8 @@
+mutation CategoryDelete($sk: String!) {
+  categoryDelete(sk: $sk) {
+    pk
+    sk
+    name
+    description
+  }
+}

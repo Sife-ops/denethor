@@ -1,9 +1,9 @@
 import crypto from "crypto";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import model from "../lib/model";
+import { APIGatewayEvent } from "aws-lambda";
 import { ApolloServer, gql } from "apollo-server-lambda";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-import { APIGatewayEvent } from "aws-lambda";
 
 /*
  * schema
@@ -14,7 +14,7 @@ const typeDefs = gql`
     pk: String
     sk: String
 
-    categories: [Category]
+    categories: [Category!]!
     description: String
     favorite: Boolean
     name: String
@@ -31,11 +31,13 @@ const typeDefs = gql`
 
   type Query {
     hello: String
-    categoryList: [Category]
+    categoryList: [Category!]!
   }
 
   type Mutation {
-    categoryCreate(name: String!, description: String): Category
+    categoryCreate(name: String!, description: String): Category!
+    categoryUpdate(sk: String!, name: String!, description: String): Category!
+    categoryDelete(sk: String!): Category!
   }
 `;
 
@@ -49,7 +51,7 @@ interface Context {
 
 const resolvers = {
   Query: {
-    hello: (_: any, __: any, context: any, info: any) => {
+    hello: (_: any, __: any, context: Context, ___: any) => {
       console.log(context.userId);
       return `Hello world!`;
     },
@@ -73,7 +75,7 @@ const resolvers = {
   Mutation: {
     categoryCreate: async (
       _: any,
-      { description, name }: { description: string; name: string },
+      { description, name }: { description?: string; name: string },
       { userId }: Context,
       __: any
     ) => {
@@ -84,9 +86,61 @@ const resolvers = {
         description,
       });
 
-      console.log(response);
+      console.log("create", response);
 
       return response;
+    },
+
+    categoryUpdate: async (
+      _: any,
+      {
+        description,
+        name,
+        sk,
+      }: {
+        description?: string;
+        name: string;
+        sk: string;
+      },
+      { userId }: Context,
+      __: any
+    ) => {
+      if (!name) {
+        throw new Error("invalid arguments: name");
+      }
+
+      const response = await model.category.update({
+        pk: `user:${userId}`,
+        sk,
+        name,
+        description,
+      });
+
+      console.log("update", response);
+
+      return response;
+    },
+
+    categoryDelete: async (
+      _: any,
+      { sk }: { sk: string },
+      { userId }: Context,
+      __: any
+    ) => {
+      const category = await model.category.get({
+        pk: `user:${userId}`,
+        sk,
+      });
+
+      if (!category) {
+        throw new Error("record not found: category");
+      }
+
+      await category.delete();
+
+      console.log("delete", category);
+
+      return category;
     },
   },
 };

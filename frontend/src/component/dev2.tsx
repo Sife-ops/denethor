@@ -3,8 +3,10 @@ import { useQuery, useMutation } from "urql";
 
 import {
   useHelloQuery,
+  useCategoryDeleteMutation,
   useCategoryCreateMutation,
   useCategoryListQuery,
+  useCategoryUpdateMutation,
 } from "../generated/graphql";
 
 const HelloQuery = `
@@ -27,6 +29,7 @@ const CategoryCreateMutation = `
 export const Dev2: React.FC = () => {
   const [description, setDescription] = React.useState("");
   const [name, setName] = React.useState("");
+  const [sk, setSk] = React.useState("");
 
   const [res] = useQuery({
     query: HelloQuery,
@@ -37,9 +40,13 @@ export const Dev2: React.FC = () => {
 
   const [helloRes] = useHelloQuery();
 
-  const [categoryCreateRes, categoryCreate] = useCategoryCreateMutation();
+  const [___, categoryCreate] = useCategoryCreateMutation();
 
   const [categoryListRes] = useCategoryListQuery();
+
+  const [__, categoryUpdate] = useCategoryUpdateMutation();
+
+  const [____, categoryDelete] = useCategoryDeleteMutation();
 
   if (fetching) {
     return <div>loading...</div>;
@@ -51,6 +58,58 @@ export const Dev2: React.FC = () => {
 
   return (
     <div>
+      <h1>category delete</h1>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const res = await categoryDelete({
+            sk,
+          });
+          console.log(res);
+        }}
+      >
+        <input
+          placeholder="sk"
+          onChange={(e) => setSk(e.target.value)}
+          value={sk}
+        />
+        <br />
+        <button type="submit">submit</button>
+      </form>
+
+      <h1>category update</h1>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const res = await categoryUpdate({
+            name,
+            sk,
+            description,
+          });
+          console.log(res);
+        }}
+      >
+        <input
+          placeholder="sk"
+          onChange={(e) => setSk(e.target.value)}
+          value={sk}
+        />
+        <br />
+        <input
+          placeholder="name"
+          onChange={(e) => setName(e.target.value)}
+          value={name}
+        />
+        <br />
+        <input
+          placeholder="description"
+          onChange={(e) => setDescription(e.target.value)}
+          value={description}
+        />
+        <br />
+        <button type="submit">submit</button>
+      </form>
+
       <h1>category list</h1>
       {categoryListRes.fetching ? (
         //
@@ -64,13 +123,11 @@ export const Dev2: React.FC = () => {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-
-          await categoryCreate({
+          const res = await categoryCreate({
             name,
             description,
           });
-
-          console.log(categoryCreateRes);
+          console.log(res);
         }}
       >
         <input

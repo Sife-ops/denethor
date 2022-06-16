@@ -17,7 +17,7 @@ export type Scalars = {
 
 export type Bookmark = {
   __typename?: 'Bookmark';
-  categories?: Maybe<Array<Maybe<Category>>>;
+  categories: Array<Category>;
   description?: Maybe<Scalars['String']>;
   favorite?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
@@ -36,7 +36,9 @@ export type Category = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  categoryCreate?: Maybe<Category>;
+  categoryCreate: Category;
+  categoryDelete: Category;
+  categoryUpdate: Category;
 };
 
 
@@ -45,9 +47,21 @@ export type MutationCategoryCreateArgs = {
   name: Scalars['String'];
 };
 
+
+export type MutationCategoryDeleteArgs = {
+  sk: Scalars['String'];
+};
+
+
+export type MutationCategoryUpdateArgs = {
+  description?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  sk: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
-  categoryList?: Maybe<Array<Maybe<Category>>>;
+  categoryList: Array<Category>;
   hello?: Maybe<Scalars['String']>;
 };
 
@@ -57,12 +71,28 @@ export type CategoryCreateMutationVariables = Exact<{
 }>;
 
 
-export type CategoryCreateMutation = { __typename?: 'Mutation', categoryCreate?: { __typename?: 'Category', pk?: string | null, sk?: string | null, name?: string | null, description?: string | null } | null };
+export type CategoryCreateMutation = { __typename?: 'Mutation', categoryCreate: { __typename?: 'Category', pk?: string | null, sk?: string | null, name?: string | null, description?: string | null } };
+
+export type CategoryDeleteMutationVariables = Exact<{
+  sk: Scalars['String'];
+}>;
+
+
+export type CategoryDeleteMutation = { __typename?: 'Mutation', categoryDelete: { __typename?: 'Category', pk?: string | null, sk?: string | null, name?: string | null, description?: string | null } };
 
 export type CategoryListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CategoryListQuery = { __typename?: 'Query', categoryList?: Array<{ __typename?: 'Category', pk?: string | null, sk?: string | null, name?: string | null, description?: string | null } | null> | null };
+export type CategoryListQuery = { __typename?: 'Query', categoryList: Array<{ __typename?: 'Category', pk?: string | null, sk?: string | null, name?: string | null, description?: string | null }> };
+
+export type CategoryUpdateMutationVariables = Exact<{
+  sk: Scalars['String'];
+  name: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CategoryUpdateMutation = { __typename?: 'Mutation', categoryUpdate: { __typename?: 'Category', pk?: string | null, sk?: string | null, name?: string | null, description?: string | null } };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -84,6 +114,20 @@ export const CategoryCreateDocument = gql`
 export function useCategoryCreateMutation() {
   return Urql.useMutation<CategoryCreateMutation, CategoryCreateMutationVariables>(CategoryCreateDocument);
 };
+export const CategoryDeleteDocument = gql`
+    mutation CategoryDelete($sk: String!) {
+  categoryDelete(sk: $sk) {
+    pk
+    sk
+    name
+    description
+  }
+}
+    `;
+
+export function useCategoryDeleteMutation() {
+  return Urql.useMutation<CategoryDeleteMutation, CategoryDeleteMutationVariables>(CategoryDeleteDocument);
+};
 export const CategoryListDocument = gql`
     query CategoryList {
   categoryList {
@@ -97,6 +141,20 @@ export const CategoryListDocument = gql`
 
 export function useCategoryListQuery(options?: Omit<Urql.UseQueryArgs<CategoryListQueryVariables>, 'query'>) {
   return Urql.useQuery<CategoryListQuery>({ query: CategoryListDocument, ...options });
+};
+export const CategoryUpdateDocument = gql`
+    mutation CategoryUpdate($sk: String!, $name: String!, $description: String) {
+  categoryUpdate(sk: $sk, name: $name, description: $description) {
+    pk
+    sk
+    name
+    description
+  }
+}
+    `;
+
+export function useCategoryUpdateMutation() {
+  return Urql.useMutation<CategoryUpdateMutation, CategoryUpdateMutationVariables>(CategoryUpdateDocument);
 };
 export const HelloDocument = gql`
     query Hello {
