@@ -54,7 +54,7 @@ export const Dev2: React.FC = () => {
             description,
           });
 
-          // console.log(categoryCreateRes);
+          console.log(categoryCreateRes);
         }}
       >
         <input
