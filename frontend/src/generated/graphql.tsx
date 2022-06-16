@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { IntrospectionQuery } from 'graphql';
 import * as Urql from 'urql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -20,19 +19,19 @@ export type Bookmark = {
   __typename?: 'Bookmark';
   categories?: Maybe<Array<Maybe<Category>>>;
   description?: Maybe<Scalars['String']>;
-  favorite: Scalars['Boolean'];
-  name: Scalars['String'];
-  pk: Scalars['String'];
-  sk: Scalars['String'];
-  url: Scalars['String'];
+  favorite?: Maybe<Scalars['Boolean']>;
+  name?: Maybe<Scalars['String']>;
+  pk?: Maybe<Scalars['String']>;
+  sk?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
 };
 
 export type Category = {
   __typename?: 'Category';
   description?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-  pk: Scalars['String'];
-  sk: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  pk?: Maybe<Scalars['String']>;
+  sk?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -51,209 +50,34 @@ export type Query = {
   hello?: Maybe<Scalars['String']>;
 };
 
+export type CategoryCreateMutationVariables = Exact<{
+  name: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CategoryCreateMutation = { __typename?: 'Mutation', categoryCreate?: { __typename?: 'Category', pk?: string | null, sk?: string | null, name?: string | null, description?: string | null } | null };
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type HelloQuery = { __typename?: 'Query', hello?: string | null };
 
-export default {
-  "__schema": {
-    "queryType": {
-      "name": "Query"
-    },
-    "mutationType": {
-      "name": "Mutation"
-    },
-    "subscriptionType": null,
-    "types": [
-      {
-        "kind": "OBJECT",
-        "name": "Bookmark",
-        "fields": [
-          {
-            "name": "categories",
-            "type": {
-              "kind": "LIST",
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Category",
-                "ofType": null
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "description",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Any"
-            },
-            "args": []
-          },
-          {
-            "name": "favorite",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "name",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "pk",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "sk",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "url",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "OBJECT",
-        "name": "Category",
-        "fields": [
-          {
-            "name": "description",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Any"
-            },
-            "args": []
-          },
-          {
-            "name": "name",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "pk",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "sk",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "OBJECT",
-        "name": "Mutation",
-        "fields": [
-          {
-            "name": "categoryCreate",
-            "type": {
-              "kind": "OBJECT",
-              "name": "Category",
-              "ofType": null
-            },
-            "args": [
-              {
-                "name": "description",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Any"
-                }
-              },
-              {
-                "name": "name",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Any"
-                  }
-                }
-              }
-            ]
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "OBJECT",
-        "name": "Query",
-        "fields": [
-          {
-            "name": "hello",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Any"
-            },
-            "args": []
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "SCALAR",
-        "name": "Any"
-      }
-    ],
-    "directives": []
-  }
-} as unknown as IntrospectionQuery;
 
+export const CategoryCreateDocument = gql`
+    mutation CategoryCreate($name: String!, $description: String) {
+  categoryCreate(name: $name, description: $description) {
+    pk
+    sk
+    name
+    description
+  }
+}
+    `;
+
+export function useCategoryCreateMutation() {
+  return Urql.useMutation<CategoryCreateMutation, CategoryCreateMutationVariables>(CategoryCreateDocument);
+};
 export const HelloDocument = gql`
     query Hello {
   hello

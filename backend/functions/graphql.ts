@@ -7,22 +7,22 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-co
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
   type Bookmark {
-    pk: String!
-    sk: String!
+    pk: String
+    sk: String
 
     categories: [Category]
     description: String
-    favorite: Boolean!
-    name: String!
-    url: String!
+    favorite: Boolean
+    name: String
+    url: String
   }
 
   type Category {
-    pk: String!
-    sk: String!
+    pk: String
+    sk: String
 
     description: String
-    name: String!
+    name: String
   }
 
   type Query {

@@ -1,5 +1,5 @@
 import React from "react";
-import { useHelloQuery } from "../generated/graphql";
+import { useHelloQuery, useCategoryCreateMutation } from "../generated/graphql";
 import { useQuery, useMutation } from "urql";
 
 const HelloQuery = `
@@ -23,14 +23,16 @@ export const Dev2: React.FC = () => {
   const [description, setDescription] = React.useState("");
   const [name, setName] = React.useState("");
 
-  const [res, reexec] = useQuery({
+  const [res] = useQuery({
     query: HelloQuery,
   });
   const { data, fetching, error } = res;
 
-  const [_, categoryCreate] = useMutation(CategoryCreateMutation);
+  const [_, categoryCreate2] = useMutation(CategoryCreateMutation);
 
-  const [helloRes, helloReexec] = useHelloQuery();
+  const [helloRes] = useHelloQuery();
+
+  const [categoryCreateRes, categoryCreate] = useCategoryCreateMutation();
 
   if (fetching) {
     return <div>loading...</div>;
@@ -42,6 +44,34 @@ export const Dev2: React.FC = () => {
 
   return (
     <div>
+      <h1>category create</h1>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+
+          await categoryCreate({
+            name,
+            description,
+          });
+
+          // console.log(categoryCreateRes);
+        }}
+      >
+        <input
+          placeholder="name"
+          onChange={(e) => setName(e.target.value)}
+          value={name}
+        />
+        <br />
+        <input
+          placeholder="description"
+          onChange={(e) => setDescription(e.target.value)}
+          value={description}
+        />
+        <br />
+        <button type="submit">submit</button>
+      </form>
+
       <h1>codegen test</h1>
       {helloRes.fetching ? (
         //
@@ -51,11 +81,11 @@ export const Dev2: React.FC = () => {
         <div>{JSON.stringify(helloRes)}</div>
       )}
 
-      <h1>category create</h1>
+      <h1>category create old</h1>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          const res = await categoryCreate({
+          const res = await categoryCreate2({
             name,
             description,
           });
@@ -81,11 +111,12 @@ export const Dev2: React.FC = () => {
       <button
         onClick={async () => {
           //
-          const res = await categoryCreate({
+          const res = await categoryCreate2({
             name: "bb",
             description: undefined,
           });
           console.log(res);
+          console.log(_);
         }}
       >
         test
