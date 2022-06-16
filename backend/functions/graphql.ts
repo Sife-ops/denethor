@@ -3,8 +3,12 @@ import jwt_decode, { JwtPayload } from "jwt-decode";
 import model from "../lib/model";
 import { ApolloServer, gql } from "apollo-server-lambda";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import { APIGatewayEvent } from "aws-lambda";
 
-// Construct a schema, using GraphQL schema language
+/*
+ * schema
+ */
+
 const typeDefs = gql`
   type Bookmark {
     pk: String
@@ -34,11 +38,14 @@ const typeDefs = gql`
   }
 `;
 
+/*
+ * resolvers
+ */
+
 interface Context {
   userId?: string;
 }
 
-// Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
     hello: (_: any, __: any, context: any, info: any) => {
@@ -68,30 +75,39 @@ const resolvers = {
   },
 };
 
+/*
+ * server
+ */
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({
-    event,
-    // express,
-    // context,
-  }): Context => {
-    try {
-      const decoded = jwt_decode<JwtPayload>(event.headers.authorization);
+  context: ({ event }: { event: APIGatewayEvent }): Context => {
+    const userIdError = new Error("userId undefined");
 
-      // if (!decoded.sub) {
-      //   throw new Error("userId undefined");
-      // }
+    try {
+      const { authorization } = event.headers;
+
+      if (!authorization) {
+        throw new Error("no authorization header");
+      }
+
+      const decoded = jwt_decode<JwtPayload>(authorization);
+
+      if (!decoded.sub) {
+        throw userIdError;
+      }
 
       return {
         userId: decoded.sub,
-        // headers: event.headers,
-        // functionName: context.functionName,
-        // expressRequest: express.req,
-        // event,
-        // context,
       };
-    } catch {
+    } catch (error: any) {
+      console.log(error.message);
+
+      if (error === userIdError) {
+        throw userIdError;
+      }
+
       return {};
     }
   },
