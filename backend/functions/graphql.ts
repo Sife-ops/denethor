@@ -4,6 +4,7 @@ import model from "../lib/model";
 import { APIGatewayEvent } from "aws-lambda";
 import { ApolloServer, gql } from "apollo-server-lambda";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import { Context } from "../lib/graphql/context";
 
 /*
  * schema
@@ -44,10 +45,6 @@ const typeDefs = gql`
 /*
  * resolvers
  */
-
-interface Context {
-  userId?: string;
-}
 
 const resolvers = {
   Query: {
