@@ -1,0 +1,15 @@
+overwrite: true
+schema:
+  - https://eq3muaea1b.execute-api.us-east-1.amazonaws.com:
+      headers:
+        Authorization: "Bearer ${DENETHOR_TOKEN}"
+documents: "src/**/*.graphql"
+generates:
+  src/generated/graphql.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      # - "typescript-react-apollo"
+  # ./graphql.schema.json:
+  #   plugins:
+  #     - "introspection"
