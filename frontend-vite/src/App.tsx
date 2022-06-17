@@ -1,6 +1,6 @@
-import { useState } from "react";
 import "./App.css";
 import { Auth } from "aws-amplify";
+import { useState } from "react";
 
 function App() {
   const [email, setEmail] = useState("");

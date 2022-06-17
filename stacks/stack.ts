@@ -1,10 +1,9 @@
 import {
   Auth,
   GraphQLApi,
-  ReactStaticSite,
-  ViteStaticSite,
   StackContext,
   Table,
+  ViteStaticSite,
 } from "@serverless-stack/resources";
 
 const { DOMAIN, SUBDOMAIN } = process.env;
@@ -59,25 +58,8 @@ export function stack({ stack }: StackContext) {
   auth.attachPermissionsForAuthUsers([graphqlApi]);
   graphqlApi.attachPermissions([table]);
 
-  // // todo: migrate to vite
-  // const reactStaticSite = new ReactStaticSite(stack, "reactStaticSite", {
-  //   path: "frontend",
-  //   environment: {
-  //     REACT_APP_REGION: stack.region,
-  //     REACT_APP_API_URL: graphqlApi.url,
-  //     REACT_APP_USER_POOL_ID: auth.userPoolId,
-  //     REACT_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
-  //     REACT_APP_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
-  //   },
-  //   customDomain: {
-  //     domainName: `${SUBDOMAIN}.${DOMAIN}`,
-  //     domainAlias: `www.${SUBDOMAIN}.${DOMAIN}`,
-  //     hostedZone: `${DOMAIN}`,
-  //   },
-  // });
-
-  // todo: migrate to vite
   const viteStaticSite = new ViteStaticSite(stack, "viteStaticSite", {
+    // todo: move to 'frontend'
     path: "frontend-vite",
     environment: {
       VITE_REGION: stack.region,
