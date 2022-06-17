@@ -10,7 +10,8 @@
   "dependencies": {
     "aws-amplify": "^4.3.25",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@serverless-stack/static-site-env": "^1.2.25",

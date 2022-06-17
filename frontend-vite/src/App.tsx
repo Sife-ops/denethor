@@ -1,99 +1,68 @@
+// import { Dev } from "./component/dev";
+// import { Dev2 } from "./component/dev2";
+// import { SignIn } from "./component/sign-in";
+// import { SignUp } from "./component/sign-up";
+// import { setAccessToken } from "./token";
 import "./App.css";
+import "./App.css";
+import React from "react";
 import { Auth } from "aws-amplify";
-import { useState } from "react";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+
+const Landing: React.FC = () => {
+  return <div>landing</div>;
+};
 
 function App() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const nav = useNavigate();
 
-  const [confirmEmail, setConfirmEmail] = useState("");
-  const [confirmCode, setConfirmCode] = useState("");
+  const [isSignedIn, setIsSignedIn] = React.useState(false);
 
   return (
-    <div className="App">
-      <h1>sign up</h1>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          try {
-            const res = await Auth.signUp(email, password);
-            console.log("auth", res);
-            setConfirmEmail(email);
-          } catch (e) {
-            console.log(e);
-          }
-        }}
-      >
-        <input
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          value={email}
-        />
-        <br />
-        <input
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          value={password}
-        />
-        <br />
-        <button type="submit">submit</button>
-      </form>
+    <div>
+      <ul>
+        <li onClick={() => nav("/")}>landing</li>
+        {isSignedIn ? (
+          <>
+            <li
+              onClick={async () => {
+                await Auth.signOut();
+                // setAccessToken("");
+                setIsSignedIn(false);
+              }}
+            >
+              sign out
+            </li>
+            <li onClick={() => nav("/dev2")}>dev2</li>
+          </>
+        ) : (
+          <>
+            <li onClick={() => nav("/signin")}>sign in</li>
+            <li onClick={() => nav("/signup")}>sign up</li>
+          </>
+        )}
+        <li onClick={() => nav("/dev")}>dev</li>
+      </ul>
 
-      <h1>confirm</h1>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          try {
-            const res = await Auth.confirmSignUp(confirmEmail, confirmCode);
-            console.log("auth", res);
-          } catch (e) {
-            console.log(e);
-          }
-        }}
-      >
-        <input
-          onChange={(e) => {
-            setConfirmCode(e.target.value);
-          }}
-          value={confirmCode}
-        />
-        <br />
-        <button type="submit">submit</button>
-      </form>
-
-      <h1>sign in</h1>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          try {
-            const res = await Auth.signIn(email, password);
-            console.log(res);
-            // console.log(res.signInUserSession.accessToken.jwtToken);
-            // setAccessToken(res.signInUserSession.accessToken.jwtToken);
-            // p.setIsSignedIn(true);
-          } catch (e) {
-            console.log(e);
-          }
-        }}
-      >
-        <input
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          value={email}
-        />
-        <br />
-        <input
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          value={password}
-        />
-        <br />
-        <button type="submit">submit</button>
-      </form>
+      {isSignedIn ? (
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          {/* <Route path="/dev" element={<Dev />} />
+          <Route path="/dev2" element={<Dev2 />} /> */}
+          <Route path="*" element={<Navigate replace to="/" />} />
+        </Routes>
+      ) : (
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          {/* <Route
+            path="/signin"
+            element={<SignIn setIsSignedIn={setIsSignedIn} />}
+          />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/dev" element={<Dev />} /> */}
+          <Route path="*" element={<Navigate replace to="/" />} />
+        </Routes>
+      )}
     </div>
   );
 }

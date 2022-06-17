@@ -3,6 +3,7 @@ import App from "./App";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Amplify } from "aws-amplify";
+import { BrowserRouter } from "react-router-dom";
 import { env } from "./constant";
 
 Amplify.configure({
@@ -16,7 +17,9 @@ Amplify.configure({
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <BrowserRouter>
     <App />
-  </React.StrictMode>
+  </BrowserRouter>
+  // </React.StrictMode>
 );
