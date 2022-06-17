@@ -2,6 +2,7 @@ import {
   Auth,
   GraphQLApi,
   ReactStaticSite,
+  ViteStaticSite,
   StackContext,
   Table,
 } from "@serverless-stack/resources";
@@ -58,15 +59,32 @@ export function stack({ stack }: StackContext) {
   auth.attachPermissionsForAuthUsers([graphqlApi]);
   graphqlApi.attachPermissions([table]);
 
+  // // todo: migrate to vite
+  // const reactStaticSite = new ReactStaticSite(stack, "reactStaticSite", {
+  //   path: "frontend",
+  //   environment: {
+  //     REACT_APP_REGION: stack.region,
+  //     REACT_APP_API_URL: graphqlApi.url,
+  //     REACT_APP_USER_POOL_ID: auth.userPoolId,
+  //     REACT_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
+  //     REACT_APP_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
+  //   },
+  //   customDomain: {
+  //     domainName: `${SUBDOMAIN}.${DOMAIN}`,
+  //     domainAlias: `www.${SUBDOMAIN}.${DOMAIN}`,
+  //     hostedZone: `${DOMAIN}`,
+  //   },
+  // });
+
   // todo: migrate to vite
-  const reactStaticSite = new ReactStaticSite(stack, "reactStaticSite", {
-    path: "frontend",
+  const viteStaticSite = new ViteStaticSite(stack, "viteStaticSite", {
+    path: "frontend-vite",
     environment: {
-      REACT_APP_REGION: stack.region,
-      REACT_APP_API_URL: graphqlApi.url,
-      REACT_APP_USER_POOL_ID: auth.userPoolId,
-      REACT_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
-      REACT_APP_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
+      VITE_REGION: stack.region,
+      VITE_API_URL: graphqlApi.url,
+      VITE_USER_POOL_ID: auth.userPoolId,
+      VITE_USER_POOL_CLIENT_ID: auth.userPoolClientId,
+      VITE_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
     },
     customDomain: {
       domainName: `${SUBDOMAIN}.${DOMAIN}`,
@@ -78,7 +96,7 @@ export function stack({ stack }: StackContext) {
   stack.addOutputs({
     ApiEndpoint: graphqlApi.url,
     IdentityPoolId: auth.cognitoIdentityPoolId || "",
-    SiteUrl: reactStaticSite.url,
+    SiteUrl: viteStaticSite.url,
     Table: table.tableName,
     UserPoolClientId: auth.userPoolClientId,
     UserPoolId: auth.userPoolId,
