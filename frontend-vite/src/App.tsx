@@ -1,4 +1,4 @@
-// import { Dev } from "./component/dev";
+import { Dev } from "./component/dev";
 // import { Dev2 } from "./component/dev2";
 // import { SignIn } from "./component/sign-in";
 // import { SignUp } from "./component/sign-up";
@@ -47,8 +47,8 @@ function App() {
       {isSignedIn ? (
         <Routes>
           <Route path="/" element={<Landing />} />
-          {/* <Route path="/dev" element={<Dev />} />
-          <Route path="/dev2" element={<Dev2 />} /> */}
+          <Route path="/dev" element={<Dev />} />
+          {/* <Route path="/dev2" element={<Dev2 />} /> */}
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       ) : (
@@ -58,8 +58,8 @@ function App() {
             path="/signin"
             element={<SignIn setIsSignedIn={setIsSignedIn} />}
           />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/dev" element={<Dev />} /> */}
+          <Route path="/signup" element={<SignUp />} /> */}
+          <Route path="/dev" element={<Dev />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       )}
