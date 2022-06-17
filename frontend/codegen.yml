@@ -1,6 +1,9 @@
 # todo: use downloaded schema file instead of second api
 overwrite: true
-schema: "https://fi2fssm4r3.execute-api.us-east-1.amazonaws.com"
+schema:
+  - https://7fdv1krooc.execute-api.us-east-1.amazonaws.com:
+      headers:
+        Authorization: "Bearer ${DENETHOR_TOKEN}"
 documents: "src/**/*.graphql"
 generates:
   src/generated/graphql.tsx:

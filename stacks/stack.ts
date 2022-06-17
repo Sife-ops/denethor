@@ -24,7 +24,7 @@ export function stack({ stack }: StackContext) {
     },
   });
 
-  const cognitoAuth = new Auth(stack, "cognitoAuth", {
+  const auth = new Auth(stack, "auth", {
     login: ["email"],
   });
 
@@ -33,8 +33,8 @@ export function stack({ stack }: StackContext) {
       jwt: {
         type: "user_pool",
         userPool: {
-          id: cognitoAuth.userPoolId,
-          clientIds: [cognitoAuth.userPoolClientId],
+          id: auth.userPoolId,
+          clientIds: [auth.userPoolClientId],
         },
       },
     },
@@ -55,35 +55,18 @@ export function stack({ stack }: StackContext) {
     },
   });
 
-  cognitoAuth.attachPermissionsForAuthUsers([graphqlApi]);
-
+  auth.attachPermissionsForAuthUsers([graphqlApi]);
   graphqlApi.attachPermissions([table]);
 
-  const graphqlApiPublic = new GraphQLApi(stack, "graphqlApiPublic", {
-    defaults: {
-      function: {
-        environment: {
-          tableName: 'Fhqwhgads',
-        },
-      },
-    },
-    server: {
-      handler: "functions/graphql.handler",
-      bundle: {
-        minify: false,
-      },
-    },
-  });
-
   // todo: migrate to vite
-  const reactSite = new ReactStaticSite(stack, "reactSite", {
+  const reactStaticSite = new ReactStaticSite(stack, "reactStaticSite", {
     path: "frontend",
     environment: {
       REACT_APP_REGION: stack.region,
       REACT_APP_API_URL: graphqlApi.url,
-      REACT_APP_USER_POOL_ID: cognitoAuth.userPoolId,
-      REACT_APP_USER_POOL_CLIENT_ID: cognitoAuth.userPoolClientId,
-      REACT_APP_IDENTITY_POOL_ID: cognitoAuth.cognitoIdentityPoolId || "",
+      REACT_APP_USER_POOL_ID: auth.userPoolId,
+      REACT_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
+      REACT_APP_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
     },
     customDomain: {
       domainName: `${SUBDOMAIN}.${DOMAIN}`,
@@ -93,12 +76,11 @@ export function stack({ stack }: StackContext) {
   });
 
   stack.addOutputs({
-    GraphqlApiEndpoint: graphqlApi.url,
-    GraphqlApiPublicEndpoint: graphqlApiPublic.url,
-    IdentityPoolId: cognitoAuth.cognitoIdentityPoolId || "",
-    ReactSiteUrl: reactSite.url,
+    ApiEndpoint: graphqlApi.url,
+    IdentityPoolId: auth.cognitoIdentityPoolId || "",
+    SiteUrl: reactStaticSite.url,
     Table: table.tableName,
-    UserPoolClientId: cognitoAuth.userPoolClientId,
-    UserPoolId: cognitoAuth.userPoolId,
+    UserPoolClientId: auth.userPoolClientId,
+    UserPoolId: auth.userPoolId,
   });
 }
