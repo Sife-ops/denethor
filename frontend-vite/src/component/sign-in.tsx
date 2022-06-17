@@ -1,6 +1,6 @@
 import { Auth } from "aws-amplify";
+import { tokenKey } from "../constant";
 import { useState } from "react";
-// import { setAccessToken } from "../token";
 
 export const SignIn: React.FC<{
   setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,8 +16,10 @@ export const SignIn: React.FC<{
           e.preventDefault();
           try {
             const res = await Auth.signIn(email, password);
-            console.log(res);
-            // setAccessToken(res.signInUserSession.accessToken.jwtToken);
+            localStorage.setItem(
+              tokenKey,
+              res.signInUserSession.accessToken.jwtToken
+            );
             p.setIsSignedIn(true);
           } catch (e) {
             console.log(e);
@@ -29,6 +31,7 @@ export const SignIn: React.FC<{
             setEmail(e.target.value);
           }}
           value={email}
+          type={"email"}
         />
         <br />
         <input
@@ -36,6 +39,7 @@ export const SignIn: React.FC<{
             setPassword(e.target.value);
           }}
           value={password}
+          type={"password"}
         />
         <br />
         <button type="submit">submit</button>

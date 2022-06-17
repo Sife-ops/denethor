@@ -3,7 +3,8 @@ import App from "./App";
 import ReactDOM from "react-dom/client";
 import { Amplify } from "aws-amplify";
 import { BrowserRouter } from "react-router-dom";
-import { env } from "./constant";
+import { Provider as UrqlProvider, createClient } from "urql";
+import { env, tokenKey } from "./constant";
 
 Amplify.configure({
   Auth: {
@@ -15,10 +16,23 @@ Amplify.configure({
   },
 });
 
+const client = createClient({
+  url: env.apiGateway.URL,
+  fetchOptions: () => {
+    return {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem(tokenKey) || ""}`,
+      },
+    };
+  },
+});
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <UrqlProvider value={client}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </UrqlProvider>
   // </React.StrictMode>
 );

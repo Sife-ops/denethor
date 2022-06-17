@@ -1,5 +1,5 @@
 import React from "react";
-import { env } from "../constant";
+import { env, tokenKey } from "../constant";
 // import { getAccessToken } from "../token";
 
 export const Dev: React.FC = () => {
@@ -7,10 +7,10 @@ export const Dev: React.FC = () => {
 
   return (
     <div>
-      <h1>print global token</h1>
+      <h1>print local token</h1>
       <button
         onClick={() => {
-          // console.log(`_${getAccessToken()}_`);
+          console.log(JSON.stringify(localStorage.getItem(tokenKey)));
         }}
       >
         test

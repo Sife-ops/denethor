@@ -1,9 +1,8 @@
-// import { Dev2 } from "./component/dev2";
-// import { setAccessToken } from "./token";
 import "./App.css";
 import React from "react";
 import { Auth } from "aws-amplify";
 import { Dev } from "./component/dev";
+import { Dev2 } from "./component/dev2";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { SignIn } from "./component/sign-in";
 import { SignUp } from "./component/sign-up";
@@ -55,7 +54,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/dev" element={<Dev />} />
-          {/* <Route path="/dev2" element={<Dev2 />} /> */}
+          <Route path="/dev2" element={<Dev2 />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       ) : (
