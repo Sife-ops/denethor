@@ -8,9 +8,9 @@
 # todo
 - session refresh
 - schema merging
-- migrate to vite
+- migrate to vite :heavy_check_mark:
     - requirements:
-        - support for aws-amplify
+        - support for aws-amplify :heavy_check_mark:
         - ability to authenticate without aws-amplify
 
 # walkthrough

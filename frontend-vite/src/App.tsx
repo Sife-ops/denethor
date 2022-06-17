@@ -1,13 +1,13 @@
-import { Dev } from "./component/dev";
 // import { Dev2 } from "./component/dev2";
-// import { SignIn } from "./component/sign-in";
-// import { SignUp } from "./component/sign-up";
 // import { setAccessToken } from "./token";
-import "./App.css";
 import "./App.css";
 import React from "react";
 import { Auth } from "aws-amplify";
+import { Dev } from "./component/dev";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { SignIn } from "./component/sign-in";
+import { SignUp } from "./component/sign-up";
+import { tokenKey } from "./constant";
 
 const Landing: React.FC = () => {
   return <div>landing</div>;
@@ -17,6 +17,12 @@ function App() {
   const nav = useNavigate();
 
   const [isSignedIn, setIsSignedIn] = React.useState(false);
+
+  React.useEffect(() => {
+    if (localStorage.getItem(tokenKey)) {
+      setIsSignedIn(true);
+    }
+  }, []);
 
   return (
     <div>
@@ -28,6 +34,7 @@ function App() {
               onClick={async () => {
                 await Auth.signOut();
                 // setAccessToken("");
+                localStorage.removeItem(tokenKey);
                 setIsSignedIn(false);
               }}
             >
@@ -54,11 +61,11 @@ function App() {
       ) : (
         <Routes>
           <Route path="/" element={<Landing />} />
-          {/* <Route
+          <Route
             path="/signin"
             element={<SignIn setIsSignedIn={setIsSignedIn} />}
           />
-          <Route path="/signup" element={<SignUp />} /> */}
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/dev" element={<Dev />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>

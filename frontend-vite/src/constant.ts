@@ -11,3 +11,5 @@ export const env = {
     USER_POOL_ID: import.meta.env.VITE_USER_POOL_ID,
   },
 };
+
+export const tokenKey = 'denethor'
