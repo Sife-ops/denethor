@@ -16,6 +16,7 @@ export const SignIn: React.FC<{
           e.preventDefault();
           try {
             const res = await Auth.signIn(email, password);
+            console.log(res);
             localStorage.setItem(
               tokenKey,
               res.signInUserSession.accessToken.jwtToken

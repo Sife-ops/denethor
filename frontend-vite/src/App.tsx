@@ -32,7 +32,6 @@ function App() {
             <li
               onClick={async () => {
                 await Auth.signOut();
-                // setAccessToken("");
                 localStorage.removeItem(tokenKey);
                 setIsSignedIn(false);
               }}
