@@ -1,70 +1,99 @@
 import { useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { Amplify } from "aws-amplify";
-
-// todo: move to file
-const env = {
-  apiGateway: {
-    REGION: import.meta.env.VITE_REGION,
-    URL: import.meta.env.VITE_API_URL,
-  },
-  cognito: {
-    REGION: import.meta.env.VITE_REGION,
-    USER_POOL_ID: import.meta.env.VITE_USER_POOL_ID,
-    USER_POOL_CLIENT_ID: import.meta.env.VITE_USER_POOL_CLIENT_ID,
-    IDENTITY_POOL_ID: import.meta.env.VITE_IDENTITY_POOL_ID,
-  },
-};
-
-Amplify.configure({
-  Auth: {
-    mandatorySignIn: true,
-    region: env.cognito.REGION,
-    userPoolId: env.cognito.USER_POOL_ID,
-    identityPoolId: env.cognito.IDENTITY_POOL_ID,
-    userPoolWebClientId: env.cognito.USER_POOL_CLIENT_ID,
-  },
-});
-
-console.log(env);
+import { Auth } from "aws-amplify";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [confirmEmail, setConfirmEmail] = useState("");
+  const [confirmCode, setConfirmCode] = useState("");
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {" | "}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+      <h1>sign up</h1>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          try {
+            const res = await Auth.signUp(email, password);
+            console.log("auth", res);
+            setConfirmEmail(email);
+          } catch (e) {
+            console.log(e);
+          }
+        }}
+      >
+        <input
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+          value={email}
+        />
+        <br />
+        <input
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+          value={password}
+        />
+        <br />
+        <button type="submit">submit</button>
+      </form>
+
+      <h1>confirm</h1>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          try {
+            const res = await Auth.confirmSignUp(confirmEmail, confirmCode);
+            console.log("auth", res);
+          } catch (e) {
+            console.log(e);
+          }
+        }}
+      >
+        <input
+          onChange={(e) => {
+            setConfirmCode(e.target.value);
+          }}
+          value={confirmCode}
+        />
+        <br />
+        <button type="submit">submit</button>
+      </form>
+
+      <h1>sign in</h1>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          try {
+            const res = await Auth.signIn(email, password);
+            console.log(res);
+            // console.log(res.signInUserSession.accessToken.jwtToken);
+            // setAccessToken(res.signInUserSession.accessToken.jwtToken);
+            // p.setIsSignedIn(true);
+          } catch (e) {
+            console.log(e);
+          }
+        }}
+      >
+        <input
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+          value={email}
+        />
+        <br />
+        <input
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+          value={password}
+        />
+        <br />
+        <button type="submit">submit</button>
+      </form>
     </div>
   );
 }
