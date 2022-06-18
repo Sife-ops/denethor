@@ -65,12 +65,34 @@ export type Query = {
   hello?: Maybe<Scalars['String']>;
 };
 
+export type CategoryCreateMutationVariables = Exact<{
+  name: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CategoryCreateMutation = { __typename?: 'Mutation', categoryCreate: { __typename?: 'Category', pk?: string | null, sk?: string | null, name?: string | null, description?: string | null } };
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type HelloQuery = { __typename?: 'Query', hello?: string | null };
 
 
+export const CategoryCreateDocument = gql`
+    mutation CategoryCreate($name: String!, $description: String) {
+  categoryCreate(name: $name, description: $description) {
+    pk
+    sk
+    name
+    description
+  }
+}
+    `;
+
+export function useCategoryCreateMutation() {
+  return Urql.useMutation<CategoryCreateMutation, CategoryCreateMutationVariables>(CategoryCreateDocument);
+};
 export const HelloDocument = gql`
     query Hello {
   hello
