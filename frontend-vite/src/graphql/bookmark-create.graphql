@@ -1,0 +1,20 @@
+mutation BookmarkCreate(
+  $description: String!
+  $favorite: Boolean!
+  $name: String!
+  $url: String!
+) {
+  bookmarkCreate(
+    description: $description
+    favorite: $favorite
+    name: $name
+    url: $url
+  ) {
+    pk
+    sk
+    description
+    favorite
+    name
+    url
+  }
+}

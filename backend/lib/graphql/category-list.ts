@@ -10,7 +10,7 @@ export const categoryList = {
   `,
   resolver: {
     Query: {
-      categoryList: async (_: any, __: any, { userId }: Context, ___: any) => {
+      categoryList: async (_: any, __: any, { userId }: Context) => {
         const categories = await model.category
           .query("pk")
           .eq(`user:${userId}`)

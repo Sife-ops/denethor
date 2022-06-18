@@ -1,20 +1,65 @@
 import React from "react";
 import { Auth } from "aws-amplify";
-import { useHelloQuery,
 
+import {
+  useHelloQuery,
   useCategoryCreateMutation,
+  useBookmarkCreateMutation,
 } from "../generated/graphql";
 
 export const Dev2: React.FC = () => {
   const [description, setDescription] = React.useState("");
   const [name, setName] = React.useState("");
+  const [url, setUrl] = React.useState("");
+  const [favorite, setFavorite] = React.useState(false);
   const [sk, setSk] = React.useState("");
 
   const [helloRes] = useHelloQuery();
   const [_, categoryCreate] = useCategoryCreateMutation();
+  const [__, bookmarkCreate] = useBookmarkCreateMutation();
 
   return (
     <div>
+      <h1>bookmark create</h1>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const res = await bookmarkCreate({
+            description,
+            favorite,
+            name,
+            url,
+          });
+          console.log(res);
+        }}
+      >
+        <input
+          placeholder="name"
+          onChange={(e) => setName(e.target.value)}
+          value={name}
+        />
+        <br />
+        <input
+          placeholder="description"
+          onChange={(e) => setDescription(e.target.value)}
+          value={description}
+        />
+        <br />
+        <input
+          placeholder="url"
+          onChange={(e) => setUrl(e.target.value)}
+          value={url}
+        />
+        <br />
+        <input
+          type={"checkbox"}
+          onChange={() => setFavorite((s) => !s)}
+          checked={favorite}
+        />
+        <br />
+        <button type="submit">submit</button>
+      </form>
+
       <h1>category create</h1>
       <form
         onSubmit={async (e) => {

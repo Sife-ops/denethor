@@ -5,7 +5,7 @@ export const bookmark = gql`
     pk: String
     sk: String
 
-    categories: [Category!]!
+    # categories: [Category!]!
     description: String
     favorite: Boolean
     name: String

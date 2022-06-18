@@ -17,7 +17,6 @@ export type Scalars = {
 
 export type Bookmark = {
   __typename?: 'Bookmark';
-  categories: Array<Category>;
   description?: Maybe<Scalars['String']>;
   favorite?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
@@ -36,9 +35,18 @@ export type Category = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  bookmarkCreate: Bookmark;
   categoryCreate: Category;
   categoryDelete: Category;
   categoryUpdate: Category;
+};
+
+
+export type MutationBookmarkCreateArgs = {
+  description: Scalars['String'];
+  favorite: Scalars['Boolean'];
+  name: Scalars['String'];
+  url: Scalars['String'];
 };
 
 
@@ -65,6 +73,16 @@ export type Query = {
   hello?: Maybe<Scalars['String']>;
 };
 
+export type BookmarkCreateMutationVariables = Exact<{
+  description: Scalars['String'];
+  favorite: Scalars['Boolean'];
+  name: Scalars['String'];
+  url: Scalars['String'];
+}>;
+
+
+export type BookmarkCreateMutation = { __typename?: 'Mutation', bookmarkCreate: { __typename?: 'Bookmark', pk?: string | null, sk?: string | null, description?: string | null, favorite?: boolean | null, name?: string | null, url?: string | null } };
+
 export type CategoryCreateMutationVariables = Exact<{
   name: Scalars['String'];
   description?: InputMaybe<Scalars['String']>;
@@ -79,6 +97,27 @@ export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 export type HelloQuery = { __typename?: 'Query', hello?: string | null };
 
 
+export const BookmarkCreateDocument = gql`
+    mutation BookmarkCreate($description: String!, $favorite: Boolean!, $name: String!, $url: String!) {
+  bookmarkCreate(
+    description: $description
+    favorite: $favorite
+    name: $name
+    url: $url
+  ) {
+    pk
+    sk
+    description
+    favorite
+    name
+    url
+  }
+}
+    `;
+
+export function useBookmarkCreateMutation() {
+  return Urql.useMutation<BookmarkCreateMutation, BookmarkCreateMutationVariables>(BookmarkCreateDocument);
+};
 export const CategoryCreateDocument = gql`
     mutation CategoryCreate($name: String!, $description: String) {
   categoryCreate(name: $name, description: $description) {

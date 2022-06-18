@@ -5,3 +5,5 @@ export default {
   bookmark,
   category,
 };
+
+export { BookmarkClass, CategoryClass };
