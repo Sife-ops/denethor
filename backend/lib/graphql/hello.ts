@@ -1,3 +1,4 @@
+import { Context } from "./context";
 import { gql } from "apollo-server-lambda";
 
 export const hello = {
@@ -6,4 +7,12 @@ export const hello = {
       hello: String
     }
   `,
+  resolver: {
+    Query: {
+      hello: (_: any, __: any, context: Context) => {
+        console.log(context.userId);
+        return `Hello world!`;
+      },
+    },
+  },
 };
