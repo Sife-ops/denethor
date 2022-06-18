@@ -7,7 +7,7 @@
 
 # todo
 - session refresh
-- schema merging
+- schema merging :heavy_check_mark:
 - migrate to vite :heavy_check_mark:
     - requirements:
         - support for aws-amplify :heavy_check_mark:

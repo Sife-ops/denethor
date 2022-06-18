@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import model, { CategoryClass } from "../model";
+import model from "../model";
 import { Context } from "./context";
 import { gql } from "apollo-server-lambda";
 
@@ -7,11 +7,11 @@ export const bookmarkCreate = {
   typeDef: gql`
     type Mutation {
       bookmarkCreate(
-        name: String!
+        categories: [String!]!
         description: String!
-        url: String!
-        # categories: [Category]!
         favorite: Boolean!
+        name: String!
+        url: String!
       ): Bookmark!
     }
   `,
@@ -20,13 +20,13 @@ export const bookmarkCreate = {
       bookmarkCreate: async (
         _: any,
         {
-          //   categories,
+          categories,
           description,
           favorite,
           name,
           url,
         }: {
-          //   categories: CategoryClass[];
+          categories: string[];
           description: string;
           favorite: boolean;
           name: string;
@@ -34,7 +34,7 @@ export const bookmarkCreate = {
         },
         { userId }: Context
       ) => {
-        const response = await model.bookmark.create({
+        const bookmark = await model.bookmark.create({
           pk: `user:${userId}`,
           sk: `bookmark:${crypto.randomUUID()}`,
           description,
@@ -43,9 +43,32 @@ export const bookmarkCreate = {
           url,
         });
 
-        console.log("create", response);
+        if (categories.length > 0) {
+          const bookmarkCategories = await model.category.batchGet(
+            categories.map((e) => ({
+              pk: `user:${userId}`,
+              sk: e,
+            }))
+          );
 
-        return response;
+          await model.category.batchPut(
+            bookmarkCategories.map((e) => ({
+              pk: e.pk,
+              sk: `${e.sk}#${bookmark.sk}`,
+              bookmark: bookmark.sk,
+            }))
+          );
+
+          return {
+            ...bookmark,
+            categories: bookmarkCategories,
+          };
+        } else {
+          return {
+            ...bookmark,
+            categories: [],
+          };
+        }
       },
     },
   },

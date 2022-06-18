@@ -17,11 +17,12 @@ export type Scalars = {
 
 export type Bookmark = {
   __typename?: 'Bookmark';
+  categories?: Maybe<Array<Category>>;
   description?: Maybe<Scalars['String']>;
   favorite?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
   pk?: Maybe<Scalars['String']>;
-  sk?: Maybe<Scalars['String']>;
+  sk: Scalars['String'];
   url?: Maybe<Scalars['String']>;
 };
 
@@ -30,7 +31,7 @@ export type Category = {
   description?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   pk?: Maybe<Scalars['String']>;
-  sk?: Maybe<Scalars['String']>;
+  sk: Scalars['String'];
 };
 
 export type Mutation = {
@@ -43,6 +44,7 @@ export type Mutation = {
 
 
 export type MutationBookmarkCreateArgs = {
+  categories: Array<Scalars['String']>;
   description: Scalars['String'];
   favorite: Scalars['Boolean'];
   name: Scalars['String'];
@@ -74,6 +76,7 @@ export type Query = {
 };
 
 export type BookmarkCreateMutationVariables = Exact<{
+  categories: Array<Scalars['String']> | Scalars['String'];
   description: Scalars['String'];
   favorite: Scalars['Boolean'];
   name: Scalars['String'];
@@ -81,7 +84,7 @@ export type BookmarkCreateMutationVariables = Exact<{
 }>;
 
 
-export type BookmarkCreateMutation = { __typename?: 'Mutation', bookmarkCreate: { __typename?: 'Bookmark', pk?: string | null, sk?: string | null, description?: string | null, favorite?: boolean | null, name?: string | null, url?: string | null } };
+export type BookmarkCreateMutation = { __typename?: 'Mutation', bookmarkCreate: { __typename?: 'Bookmark', pk?: string | null, sk: string, description?: string | null, favorite?: boolean | null, name?: string | null, url?: string | null, categories?: Array<{ __typename?: 'Category', pk?: string | null, sk: string, description?: string | null, name?: string | null }> | null } };
 
 export type CategoryCreateMutationVariables = Exact<{
   name: Scalars['String'];
@@ -89,7 +92,12 @@ export type CategoryCreateMutationVariables = Exact<{
 }>;
 
 
-export type CategoryCreateMutation = { __typename?: 'Mutation', categoryCreate: { __typename?: 'Category', pk?: string | null, sk?: string | null, name?: string | null, description?: string | null } };
+export type CategoryCreateMutation = { __typename?: 'Mutation', categoryCreate: { __typename?: 'Category', pk?: string | null, sk: string, name?: string | null, description?: string | null } };
+
+export type CategoryListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CategoryListQuery = { __typename?: 'Query', categoryList: Array<{ __typename?: 'Category', pk?: string | null, sk: string, name?: string | null, description?: string | null }> };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -98,8 +106,9 @@ export type HelloQuery = { __typename?: 'Query', hello?: string | null };
 
 
 export const BookmarkCreateDocument = gql`
-    mutation BookmarkCreate($description: String!, $favorite: Boolean!, $name: String!, $url: String!) {
+    mutation BookmarkCreate($categories: [String!]!, $description: String!, $favorite: Boolean!, $name: String!, $url: String!) {
   bookmarkCreate(
+    categories: $categories
     description: $description
     favorite: $favorite
     name: $name
@@ -111,6 +120,12 @@ export const BookmarkCreateDocument = gql`
     favorite
     name
     url
+    categories {
+      pk
+      sk
+      description
+      name
+    }
   }
 }
     `;
@@ -131,6 +146,20 @@ export const CategoryCreateDocument = gql`
 
 export function useCategoryCreateMutation() {
   return Urql.useMutation<CategoryCreateMutation, CategoryCreateMutationVariables>(CategoryCreateDocument);
+};
+export const CategoryListDocument = gql`
+    query CategoryList {
+  categoryList {
+    pk
+    sk
+    name
+    description
+  }
+}
+    `;
+
+export function useCategoryListQuery(options?: Omit<Urql.UseQueryArgs<CategoryListQueryVariables>, 'query'>) {
+  return Urql.useQuery<CategoryListQuery>({ query: CategoryListDocument, ...options });
 };
 export const HelloDocument = gql`
     query Hello {

@@ -1,10 +1,12 @@
 mutation BookmarkCreate(
+  $categories: [String!]!
   $description: String!
   $favorite: Boolean!
   $name: String!
   $url: String!
 ) {
   bookmarkCreate(
+    categories: $categories
     description: $description
     favorite: $favorite
     name: $name
@@ -16,5 +18,11 @@ mutation BookmarkCreate(
     favorite
     name
     url
+    categories {
+      pk
+      sk
+      description
+      name
+    }
   }
 }

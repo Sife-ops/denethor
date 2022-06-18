@@ -1,0 +1,8 @@
+query CategoryList {
+  categoryList {
+    pk
+    sk
+    name
+    description
+  }
+}
