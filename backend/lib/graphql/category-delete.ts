@@ -26,7 +26,7 @@ export const categoryDelete = {
 
         await category.delete();
 
-        console.log("delete", category);
+        console.log("category delete", category);
 
         return category;
       },

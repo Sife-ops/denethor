@@ -5,7 +5,11 @@ import { gql } from "apollo-server-lambda";
 export const categoryUpdate = {
   typeDef: gql`
     type Mutation {
-      categoryUpdate(sk: String!, name: String!, description: String): Category!
+      categoryUpdate(
+        sk: String!
+        name: String!
+        description: String!
+      ): Category!
     }
   `,
   resolver: {
@@ -17,7 +21,7 @@ export const categoryUpdate = {
           name,
           sk,
         }: {
-          description?: string;
+          description: string;
           name: string;
           sk: string;
         },
@@ -30,11 +34,11 @@ export const categoryUpdate = {
         const response = await model.category.update({
           pk: `user:${userId}`,
           sk,
-          name,
           description,
+          name,
         });
 
-        console.log("update", response);
+        console.log("category update", response);
 
         return response;
       },
