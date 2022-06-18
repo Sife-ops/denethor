@@ -1,6 +1,5 @@
 import React from "react";
 import { env, tokenKey } from "../constant";
-// import { getAccessToken } from "../token";
 
 export const Dev: React.FC = () => {
   return (
