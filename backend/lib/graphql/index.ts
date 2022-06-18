@@ -8,24 +8,37 @@ import { categoryList } from "./category-list";
 import { categoryUpdate } from "./category-update";
 import { hello } from "./hello";
 
-const typeArray = [
+const schemaArrays = [
   categoryCreate,
   categoryDelete,
   categoryList,
   categoryUpdate,
   hello,
-].map((e) => e.typeDef);
+].reduce(
+  (
+    a: {
+      typeArray: any[];
+      resolverArray: any[];
+    },
+    c
+  ) => {
+    return {
+      typeArray: [...a.typeArray, c.typeDef],
+      resolverArray: [...a.resolverArray, c.resolver],
+    };
+  },
+  {
+    typeArray: [],
+    resolverArray: [],
+  }
+);
 
-export const typeDefs = mergeTypeDefs([...typeArray, bookmark, category]);
+export const typeDefs = mergeTypeDefs([
+  ...schemaArrays.typeArray,
+  bookmark,
+  category,
+]);
 
-const resolverArray = [
-  categoryCreate,
-  categoryDelete,
-  categoryList,
-  categoryUpdate,
-  hello,
-].map((e) => e.resolver);
-
-export const resolvers = mergeResolvers(resolverArray);
+export const resolvers = mergeResolvers(schemaArrays.resolverArray);
 
 export { Context } from "./context";
