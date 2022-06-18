@@ -3,14 +3,12 @@ import { env, tokenKey } from "../constant";
 // import { getAccessToken } from "../token";
 
 export const Dev: React.FC = () => {
-  const [jwt, setJwt] = React.useState("");
-
   return (
     <div>
       <h1>print local token</h1>
       <button
         onClick={() => {
-          console.log(JSON.stringify(localStorage.getItem(tokenKey)));
+          console.log(localStorage.getItem(tokenKey));
         }}
       >
         test
@@ -22,7 +20,7 @@ export const Dev: React.FC = () => {
           fetch(env.apiGateway.URL, {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${jwt}`,
+              Authorization: `Bearer ${localStorage.getItem(tokenKey)}`,
               "Content-Type": "application/json",
             },
             body: JSON.stringify({

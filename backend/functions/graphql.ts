@@ -1,16 +1,64 @@
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import { APIGatewayEvent } from "aws-lambda";
-import { ApolloServer } from "apollo-server-lambda";
+import { ApolloServer, gql } from "apollo-server-lambda";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { Context, typeDefs, resolvers } from "../lib/graphql";
+import { makeExecutableSchema, mergeSchemas } from "@graphql-tools/schema";
+
+const hello = {
+  typeDefs: gql`
+    type Query {
+      hello: String
+    }
+  `,
+  resolvers: {
+    Query: {
+      hello: (_: any, __: any, context: Context) => {
+        console.log(context.userId);
+        return "Hello world!";
+      },
+    },
+  },
+};
+
+const a = makeExecutableSchema({
+  typeDefs: hello.typeDefs,
+  resolvers: hello.resolvers,
+});
+
+const ree = {
+  typeDefs: gql`
+    type Query {
+      ree: String
+    }
+  `,
+  resolvers: {
+    Query: {
+      ree: (_: any, __: any, context: Context) => {
+        console.log(context.userId);
+        return "ree!";
+      },
+    },
+  },
+};
+
+const b = makeExecutableSchema({
+  typeDefs: ree.typeDefs,
+  resolvers: ree.resolvers,
+});
+
+const c = mergeSchemas({
+  schemas: [a, b],
+});
 
 /*
  * server
  */
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  // typeDefs,
+  // resolvers,
+  schema: c,
   context: ({ event }: { event: APIGatewayEvent }): Context => {
     const noAuthHeaderError = new Error("no authorization header");
 
