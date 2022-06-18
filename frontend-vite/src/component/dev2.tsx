@@ -6,6 +6,7 @@ import {
   useCategoryCreateMutation,
   useBookmarkCreateMutation,
   useCategoryListQuery,
+  useBookmarkListQuery,
   Category,
 } from "../generated/graphql";
 
@@ -23,6 +24,7 @@ export const Dev2: React.FC = () => {
   const [_, categoryCreate] = useCategoryCreateMutation();
   const [__, bookmarkCreate] = useBookmarkCreateMutation();
   const [categoryListRes] = useCategoryListQuery();
+  const [bookmarkList] = useBookmarkListQuery();
 
   React.useEffect(() => {
     if (categoryListRes.fetching === false && categoryListRes.data) {
@@ -33,6 +35,10 @@ export const Dev2: React.FC = () => {
       setCategories(categories);
     }
   }, [categoryListRes.fetching]);
+
+  if (!bookmarkList.fetching && bookmarkList.data) {
+    console.log(bookmarkList);
+  }
 
   return (
     <div>

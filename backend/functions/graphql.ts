@@ -16,8 +16,6 @@ const server = new ApolloServer({
 
     const decoded = jwt_decode<JwtPayload>(authorization);
 
-    console.log("token", decoded);
-
     if (!decoded.sub) {
       throw new Error("userId undefined");
     }

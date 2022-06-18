@@ -20,7 +20,7 @@ export const categoryList = {
 
         const response = categories.filter((e) => !e.bookmark);
 
-        console.log(response);
+        console.log('category list', response);
 
         return response;
       },

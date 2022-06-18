@@ -10,7 +10,7 @@ export const hello = {
   resolver: {
     Query: {
       hello: (_: any, __: any, context: Context) => {
-        console.log(context.userId);
+        // console.log(context.userId);
         return `Hello world!`;
       },
     },
