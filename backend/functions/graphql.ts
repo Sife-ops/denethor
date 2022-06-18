@@ -4,13 +4,13 @@ import model from "../lib/model";
 import { APIGatewayEvent } from "aws-lambda";
 import { ApolloServer, gql } from "apollo-server-lambda";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-import { Context } from "../lib/graphql/context";
+import { Context, typeDefs } from "../lib/graphql";
 
 /*
  * schema
  */
 
-const typeDefs = gql`
+const typeDefs2 = gql`
   type Bookmark {
     pk: String
     sk: String
