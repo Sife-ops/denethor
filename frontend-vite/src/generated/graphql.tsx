@@ -64,7 +64,7 @@ export type MutationCategoryDeleteArgs = {
 
 
 export type MutationCategoryUpdateArgs = {
-  description?: InputMaybe<Scalars['String']>;
+  description: Scalars['String'];
   name: Scalars['String'];
   sk: Scalars['String'];
 };
@@ -100,10 +100,26 @@ export type CategoryCreateMutationVariables = Exact<{
 
 export type CategoryCreateMutation = { __typename?: 'Mutation', categoryCreate: { __typename?: 'Category', pk?: string | null, sk: string, name?: string | null, description?: string | null } };
 
+export type CategoryDeleteMutationVariables = Exact<{
+  sk: Scalars['String'];
+}>;
+
+
+export type CategoryDeleteMutation = { __typename?: 'Mutation', categoryDelete: { __typename?: 'Category', pk?: string | null, sk: string, description?: string | null, name?: string | null } };
+
 export type CategoryListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CategoryListQuery = { __typename?: 'Query', categoryList: Array<{ __typename?: 'Category', pk?: string | null, sk: string, name?: string | null, description?: string | null }> };
+
+export type CategoryUpdateMutationVariables = Exact<{
+  sk: Scalars['String'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+}>;
+
+
+export type CategoryUpdateMutation = { __typename?: 'Mutation', categoryUpdate: { __typename?: 'Category', pk?: string | null, sk: string, description?: string | null, name?: string | null } };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -175,6 +191,20 @@ export const CategoryCreateDocument = gql`
 export function useCategoryCreateMutation() {
   return Urql.useMutation<CategoryCreateMutation, CategoryCreateMutationVariables>(CategoryCreateDocument);
 };
+export const CategoryDeleteDocument = gql`
+    mutation CategoryDelete($sk: String!) {
+  categoryDelete(sk: $sk) {
+    pk
+    sk
+    description
+    name
+  }
+}
+    `;
+
+export function useCategoryDeleteMutation() {
+  return Urql.useMutation<CategoryDeleteMutation, CategoryDeleteMutationVariables>(CategoryDeleteDocument);
+};
 export const CategoryListDocument = gql`
     query CategoryList {
   categoryList {
@@ -188,6 +218,20 @@ export const CategoryListDocument = gql`
 
 export function useCategoryListQuery(options?: Omit<Urql.UseQueryArgs<CategoryListQueryVariables>, 'query'>) {
   return Urql.useQuery<CategoryListQuery>({ query: CategoryListDocument, ...options });
+};
+export const CategoryUpdateDocument = gql`
+    mutation CategoryUpdate($sk: String!, $name: String!, $description: String!) {
+  categoryUpdate(sk: $sk, name: $name, description: $description) {
+    pk
+    sk
+    description
+    name
+  }
+}
+    `;
+
+export function useCategoryUpdateMutation() {
+  return Urql.useMutation<CategoryUpdateMutation, CategoryUpdateMutationVariables>(CategoryUpdateDocument);
 };
 export const HelloDocument = gql`
     query Hello {
