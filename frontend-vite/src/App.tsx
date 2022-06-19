@@ -3,6 +3,7 @@ import React from "react";
 import { Auth } from "aws-amplify";
 import { Dev } from "./component/dev";
 import { Dev2 } from "./component/dev2";
+import { Dev3 } from "./component/dev3";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { SignIn } from "./component/sign-in";
 import { SignUp } from "./component/sign-up";
@@ -39,6 +40,7 @@ function App() {
               sign out
             </li>
             <li onClick={() => nav("/dev2")}>dev2</li>
+            <li onClick={() => nav("/dev3")}>dev3</li>
           </>
         ) : (
           <>
@@ -54,6 +56,7 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/dev" element={<Dev />} />
           <Route path="/dev2" element={<Dev2 />} />
+          <Route path="/dev3" element={<Dev3 />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       ) : (
