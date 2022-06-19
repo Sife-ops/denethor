@@ -2,10 +2,10 @@ import { gql } from "apollo-server-lambda";
 
 export const category = gql`
   type Category {
-    pk: String
+    pk: String!
     sk: String!
 
-    description: String
-    name: String
+    description: String!
+    name: String!
   }
 `;
