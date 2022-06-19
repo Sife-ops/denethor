@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   Category as CategoryType,
   useCategoryListQuery,
+  useCategoryCreateMutation,
 } from '../generated/graphql';
 
 interface CategorySelectable extends CategoryType {
@@ -14,7 +15,6 @@ const Category: React.FC<{
 }> = ({ category, categoriesState: { categoryToggle } }) => {
   const handleClick = () => {
     categoryToggle(category);
-    console.log('sup')
   };
 
   return (
@@ -32,17 +32,18 @@ const Category: React.FC<{
 };
 
 const Categories: React.FC<{
+  categories: CategorySelectable[];
   categoriesState: CategoriesState;
-}> = ({ categoriesState }) => {
-  if (categoriesState.categories.length < 1) {
-    return null;
+}> = (p) => {
+  if (p.categories.length < 1) {
+    return <div>no categories</div>;
   }
 
-  const categories = categoriesState.categories.map((category) => (
+  const categories = p.categories.map((category) => (
     <Category
       key={category.sk}
       category={category}
-      categoriesState={categoriesState}
+      categoriesState={p.categoriesState}
     />
   ));
 
@@ -56,10 +57,30 @@ interface CategoriesState {
   categories: CategorySelectable[];
   categoryToggle: (category: CategoryType | string) => void;
   setCategories: React.Dispatch<React.SetStateAction<CategorySelectable[]>>;
+  categoriesUpdate: (categories: CategoryType[]) => void;
 }
 
 const useCategoriesState = (): CategoriesState => {
   const [categories, setCategories] = useState<CategorySelectable[]>([]);
+
+  const categoriesUpdate = (categories: CategoryType[]) => {
+    setCategories((state) => {
+      return categories.map((category) => {
+        const found = state.find((c) => c.sk === category.sk);
+        if (found) {
+          return {
+            ...category,
+            selected: found.selected,
+          };
+        } else {
+          return {
+            ...category,
+            selected: false,
+          };
+        }
+      });
+    });
+  };
 
   const categoryToggle = (category: CategoryType | string) => {
     let sk: string;
@@ -87,6 +108,19 @@ const useCategoriesState = (): CategoriesState => {
     categories,
     categoryToggle,
     setCategories,
+    categoriesUpdate,
+  };
+};
+
+const useCategoryFormState = () => {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+
+  return {
+    description,
+    name,
+    setDescription,
+    setName,
   };
 };
 
@@ -94,26 +128,52 @@ export const Dev3: React.FC = () => {
   const [categoryListRes] = useCategoryListQuery();
 
   const categoriesState = useCategoriesState();
-  const { categories, categoryToggle, setCategories } = categoriesState;
+  const { categories, categoriesUpdate } = categoriesState;
+
+  const [_, categoryCreate] = useCategoryCreateMutation();
+  const categoryFormState = useCategoryFormState();
 
   useEffect(() => {
     const { fetching, data } = categoryListRes;
-
     if (!fetching && data) {
-      setCategories(
-        // todo: merge with existing
-        data.categoryList.map((e) => ({
-          ...e,
-          selected: false,
-        }))
-      );
+      categoriesUpdate(data.categoryList);
     }
-  }, [categoryListRes.fetching]);
+  }, [categoryListRes.data]);
 
   return (
     <div>
-      <h1>dev3</h1>
-      <Categories categoriesState={categoriesState} />
+      <h1>Categories</h1>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const { description, name } = categoryFormState;
+          const res = await categoryCreate({
+            name,
+            description,
+          });
+          console.log(res);
+        }}
+      >
+        <input
+          placeholder="name"
+          value={categoryFormState.name}
+          onChange={(e) => {
+            categoryFormState.setName(e.target.value);
+          }}
+        />
+        <br />
+        <input
+          placeholder="description"
+          value={categoryFormState.description}
+          onChange={(e) => {
+            categoryFormState.setDescription(e.target.value);
+          }}
+        />
+        <br />
+        <button type={'submit'}>submit</button>
+      </form>
+      <br />
+      <Categories categories={categories} categoriesState={categoriesState} />
     </div>
   );
 };

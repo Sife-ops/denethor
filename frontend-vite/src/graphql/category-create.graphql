@@ -1,4 +1,4 @@
-mutation CategoryCreate($name: String!, $description: String) {
+mutation CategoryCreate($name: String!, $description: String!) {
   categoryCreate(name: $name, description: $description) {
     pk
     sk
