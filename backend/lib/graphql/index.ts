@@ -1,18 +1,19 @@
-import { mergeTypeDefs, mergeResolvers } from "@graphql-tools/merge";
+import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 
-import { bookmark } from "./bookmark";
-import { bookmarkCreate } from "./bookmark-create";
-import { bookmarkDelete } from "./bookmark-delete";
-import { bookmarkList } from "./bookmark-list";
-import { bookmarkUpdate } from "./bookmark-update";
-import { category } from "./category";
-import { categoryCreate } from "./category-create";
-import { categoryDelete } from "./category-delete";
-import { categoryList } from "./category-list";
-import { categoryUpdate } from "./category-update";
-import { hello } from "./hello";
+import { bookmark } from './bookmark';
+import { bookmarkCreate } from './bookmark-create';
+import { bookmarkDelete } from './bookmark-delete';
+import { bookmarkList } from './bookmark-list';
+import { bookmarkUpdate } from './bookmark-update';
+import { category } from './category';
+import { categoryCreate } from './category-create';
+import { categoryDelete } from './category-delete';
+import { categoryList } from './category-list';
+import { categoryUpdate } from './category-update';
+import { hello } from './hello';
 
 const schemaArrays = [
+  bookmark,
   bookmarkCreate,
   bookmarkDelete,
   bookmarkList,
@@ -44,10 +45,10 @@ const schemaArrays = [
 
 export const typeDefs = mergeTypeDefs([
   ...schemaArrays.typeArray,
-  bookmark,
+  // bookmark,
   // category,
 ]);
 
 export const resolvers = mergeResolvers(schemaArrays.resolverArray);
 
-export { Context } from "./context";
+export { Context } from './context';

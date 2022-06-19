@@ -1,4 +1,4 @@
-import model, { CategoryClass } from '../model';
+import model, { CategoryClass, BookmarkClass } from '../model';
 import { gql } from 'apollo-server-lambda';
 
 export const category = {
@@ -15,7 +15,7 @@ export const category = {
   `,
   resolver: {
     Category: {
-      bookmarks: async (parent: CategoryClass) => {
+      bookmarks: async (parent: CategoryClass): Promise<BookmarkClass[]> => {
         const categoryBookmarks = await model.category
           .query('pk')
           .eq(parent.pk)
@@ -23,24 +23,18 @@ export const category = {
           .beginsWith(parent.sk + '#')
           .exec();
 
-        if (categoryBookmarks.length > 0) {
+        try {
           const bookmarks = model.bookmark.batchGet(
-            categoryBookmarks.reduce((a: any, c: CategoryClass) => {
-              if (!c.bookmark) return a;
-              return [
-                ...a,
-                {
-                  pk: c.pk,
-                  sk: c.bookmark,
-                },
-              ];
-            }, [])
+            categoryBookmarks.map((e) => ({
+              pk: e.pk,
+              // todo: remove assertion
+              sk: e.bookmark!,
+            }))
           );
-
           return bookmarks;
+        } catch {
+          return [];
         }
-
-        return [];
       },
     },
   },
