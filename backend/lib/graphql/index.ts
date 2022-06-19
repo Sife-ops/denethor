@@ -2,6 +2,7 @@ import { mergeTypeDefs, mergeResolvers } from "@graphql-tools/merge";
 
 import { bookmark } from "./bookmark";
 import { bookmarkCreate } from "./bookmark-create";
+import { bookmarkDelete } from "./bookmark-delete";
 import { bookmarkList } from "./bookmark-list";
 import { category } from "./category";
 import { categoryCreate } from "./category-create";
@@ -12,6 +13,7 @@ import { hello } from "./hello";
 
 const schemaArrays = [
   bookmarkCreate,
+  bookmarkDelete,
   bookmarkList,
   categoryCreate,
   categoryDelete,

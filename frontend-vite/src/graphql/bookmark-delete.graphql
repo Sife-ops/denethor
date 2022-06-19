@@ -1,0 +1,3 @@
+mutation BookmarkDelete($sk: String!) {
+  bookmarkDelete(sk: $sk)
+}

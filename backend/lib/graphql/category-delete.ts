@@ -20,14 +20,11 @@ export const categoryDelete = {
           sk,
         });
 
-        if (!category) {
-          throw new Error("record not found: category");
-        }
-
         await category.delete();
 
         console.log("category delete", category);
 
+        // todo: return boolean
         return category;
       },
     },

@@ -8,6 +8,7 @@ import {
   useCategoryListQuery,
   useBookmarkListQuery,
   Category,
+  useBookmarkDeleteMutation,
 } from "../generated/graphql";
 
 export const Dev2: React.FC = () => {
@@ -20,11 +21,12 @@ export const Dev2: React.FC = () => {
     Array<Category & { selected: boolean }>
   >([]);
 
-  const [helloRes] = useHelloQuery();
+  // const [helloRes] = useHelloQuery();
   const [_, categoryCreate] = useCategoryCreateMutation();
   const [__, bookmarkCreate] = useBookmarkCreateMutation();
   const [categoryListRes] = useCategoryListQuery();
-  const [bookmarkList] = useBookmarkListQuery();
+  // const [bookmarkListRes] = useBookmarkListQuery();
+  const [___, bookmarkDelete] = useBookmarkDeleteMutation();
 
   React.useEffect(() => {
     if (categoryListRes.fetching === false && categoryListRes.data) {
@@ -36,12 +38,31 @@ export const Dev2: React.FC = () => {
     }
   }, [categoryListRes.fetching]);
 
-  if (!bookmarkList.fetching && bookmarkList.data) {
-    console.log(bookmarkList);
-  }
+  // if (!bookmarkListRes.fetching && bookmarkListRes.data) {
+  //   console.log(bookmarkListRes);
+  // }
 
   return (
     <div>
+      <h1>bookmark delete</h1>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const res = await bookmarkDelete({
+            sk,
+          });
+          console.log(res);
+        }}
+      >
+        <input
+          placeholder="sk"
+          onChange={(e) => setSk(e.target.value)}
+          value={sk}
+        />
+        <br />
+        <button type="submit">submit</button>
+      </form>
+
       <h1>category list</h1>
       {categories.length > 0 &&
         categories.map((category) => (
@@ -146,12 +167,12 @@ export const Dev2: React.FC = () => {
         test
       </button>
 
-      <h1>hello query</h1>
+      {/* <h1>hello query</h1>
       {helloRes.fetching ? (
         <div>loading</div>
       ) : (
         <div>{JSON.stringify(helloRes)}</div>
-      )}
+      )} */}
     </div>
   );
 };

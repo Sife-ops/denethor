@@ -37,6 +37,7 @@ export type Category = {
 export type Mutation = {
   __typename?: 'Mutation';
   bookmarkCreate: Bookmark;
+  bookmarkDelete: Scalars['Boolean'];
   categoryCreate: Category;
   categoryDelete: Category;
   categoryUpdate: Category;
@@ -49,6 +50,11 @@ export type MutationBookmarkCreateArgs = {
   favorite: Scalars['Boolean'];
   name: Scalars['String'];
   url: Scalars['String'];
+};
+
+
+export type MutationBookmarkDeleteArgs = {
+  sk: Scalars['String'];
 };
 
 
@@ -86,6 +92,13 @@ export type BookmarkCreateMutationVariables = Exact<{
 
 
 export type BookmarkCreateMutation = { __typename?: 'Mutation', bookmarkCreate: { __typename?: 'Bookmark', pk?: string | null, sk: string, description?: string | null, favorite?: boolean | null, name?: string | null, url?: string | null, categories?: Array<{ __typename?: 'Category', pk?: string | null, sk: string, description?: string | null, name?: string | null }> | null } };
+
+export type BookmarkDeleteMutationVariables = Exact<{
+  sk: Scalars['String'];
+}>;
+
+
+export type BookmarkDeleteMutation = { __typename?: 'Mutation', bookmarkDelete: boolean };
 
 export type BookmarkListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -154,6 +167,15 @@ export const BookmarkCreateDocument = gql`
 
 export function useBookmarkCreateMutation() {
   return Urql.useMutation<BookmarkCreateMutation, BookmarkCreateMutationVariables>(BookmarkCreateDocument);
+};
+export const BookmarkDeleteDocument = gql`
+    mutation BookmarkDelete($sk: String!) {
+  bookmarkDelete(sk: $sk)
+}
+    `;
+
+export function useBookmarkDeleteMutation() {
+  return Urql.useMutation<BookmarkDeleteMutation, BookmarkDeleteMutationVariables>(BookmarkDeleteDocument);
 };
 export const BookmarkListDocument = gql`
     query BookmarkList {
