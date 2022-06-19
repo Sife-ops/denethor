@@ -1,11 +1,11 @@
-import model from "../model";
-import { Context } from "./context";
-import { gql } from "apollo-server-lambda";
+import model from '../model';
+import { Context } from './context';
+import { gql } from 'apollo-server-lambda';
 
 export const categoryDelete = {
   typeDef: gql`
     type Mutation {
-      categoryDelete(sk: String!): Category!
+      categoryDelete(sk: String!): Boolean!
     }
   `,
   resolver: {
@@ -14,7 +14,7 @@ export const categoryDelete = {
         _: any,
         { sk }: { sk: string },
         { userId }: Context
-      ) => {
+      ): Promise<Boolean> => {
         const category = await model.category.get({
           pk: `user:${userId}`,
           sk,
@@ -22,10 +22,10 @@ export const categoryDelete = {
 
         await category.delete();
 
-        console.log("category delete", category);
+        console.log('category delete', category);
 
         // todo: return boolean
-        return category;
+        return true;
       },
     },
   },

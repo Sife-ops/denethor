@@ -1,4 +1,4 @@
-import model, { CategoryClass } from '../model';
+import model, { BookmarkClass } from '../model';
 import { Context } from './context';
 import { gql } from 'apollo-server-lambda';
 
@@ -10,7 +10,11 @@ export const bookmarkList = {
   `,
   resolver: {
     Query: {
-      bookmarkList: async (_: any, __: any, { userId }: Context) => {
+      bookmarkList: async (
+        _: any,
+        __: any,
+        { userId }: Context
+      ): Promise<BookmarkClass[]> => {
         const bookmarks = await model.bookmark
           .query('pk')
           .eq(`user:${userId}`)

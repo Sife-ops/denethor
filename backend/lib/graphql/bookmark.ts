@@ -12,7 +12,7 @@ export const bookmark = {
       name: String
       url: String
 
-      categories: [Category!]!
+      categories: [Category!]
     }
   `,
   resolver: {
@@ -24,7 +24,8 @@ export const bookmark = {
           .using('categoryBookmarkIndex')
           .exec();
 
-        try {
+        // todo: use try-catch
+        if (bookmarkCategories.length > 0) {
           const categories = await model.category.batchGet(
             bookmarkCategories.map((e) => ({
               pk: e.pk,
@@ -32,9 +33,8 @@ export const bookmark = {
             }))
           );
           return categories;
-        } catch {
-          return [];
         }
+        return [];
       },
     },
   },

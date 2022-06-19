@@ -10,7 +10,7 @@ export const category = {
       description: String!
       name: String!
 
-      bookmarks: [Bookmark!]!
+      bookmarks: [Bookmark!]
     }
   `,
   resolver: {
@@ -23,18 +23,16 @@ export const category = {
           .beginsWith(parent.sk + '#')
           .exec();
 
-        try {
+        if (categoryBookmarks.length > 0) {
           const bookmarks = model.bookmark.batchGet(
             categoryBookmarks.map((e) => ({
               pk: e.pk,
-              // todo: remove assertion
               sk: e.bookmark!,
             }))
           );
           return bookmarks;
-        } catch {
-          return [];
         }
+        return [];
       },
     },
   },

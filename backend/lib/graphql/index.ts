@@ -43,11 +43,7 @@ const schemaArrays = [
   }
 );
 
-export const typeDefs = mergeTypeDefs([
-  ...schemaArrays.typeArray,
-  // bookmark,
-  // category,
-]);
+export const typeDefs = mergeTypeDefs([...schemaArrays.typeArray]);
 
 export const resolvers = mergeResolvers(schemaArrays.resolverArray);
 

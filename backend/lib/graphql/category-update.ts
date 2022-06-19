@@ -1,6 +1,6 @@
-import model from "../model";
-import { Context } from "./context";
-import { gql } from "apollo-server-lambda";
+import model, { CategoryClass } from '../model';
+import { Context } from './context';
+import { gql } from 'apollo-server-lambda';
 
 export const categoryUpdate = {
   typeDef: gql`
@@ -26,9 +26,9 @@ export const categoryUpdate = {
           sk: string;
         },
         { userId }: Context
-      ) => {
+      ): Promise<CategoryClass> => {
         if (!name) {
-          throw new Error("invalid arguments: name");
+          throw new Error('invalid arguments: name');
         }
 
         const response = await model.category.update({
@@ -38,7 +38,7 @@ export const categoryUpdate = {
           name,
         });
 
-        console.log("category update", response);
+        console.log('category update', response);
 
         return response;
       },
