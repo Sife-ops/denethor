@@ -17,6 +17,7 @@ const schemaArrays = [
   bookmarkDelete,
   bookmarkList,
   bookmarkUpdate,
+  category,
   categoryCreate,
   categoryDelete,
   categoryList,
@@ -44,7 +45,7 @@ const schemaArrays = [
 export const typeDefs = mergeTypeDefs([
   ...schemaArrays.typeArray,
   bookmark,
-  category,
+  // category,
 ]);
 
 export const resolvers = mergeResolvers(schemaArrays.resolverArray);

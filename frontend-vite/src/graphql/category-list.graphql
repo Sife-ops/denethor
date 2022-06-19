@@ -2,7 +2,18 @@ query CategoryList {
   categoryList {
     pk
     sk
-    name
+
     description
+    name
+
+    bookmarks {
+      pk
+      sk
+
+      description
+      favorite
+      name
+      url
+    }
   }
 }

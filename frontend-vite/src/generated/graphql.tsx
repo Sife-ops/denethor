@@ -28,6 +28,7 @@ export type Bookmark = {
 
 export type Category = {
   __typename?: 'Category';
+  bookmarks: Array<Bookmark>;
   description: Scalars['String'];
   name: Scalars['String'];
   pk: Scalars['String'];
@@ -146,7 +147,7 @@ export type CategoryDeleteMutation = { __typename?: 'Mutation', categoryDelete: 
 export type CategoryListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CategoryListQuery = { __typename?: 'Query', categoryList: Array<{ __typename?: 'Category', pk: string, sk: string, name: string, description: string }> };
+export type CategoryListQuery = { __typename?: 'Query', categoryList: Array<{ __typename?: 'Category', pk: string, sk: string, description: string, name: string, bookmarks: Array<{ __typename?: 'Bookmark', pk?: string | null, sk: string, description?: string | null, favorite?: boolean | null, name?: string | null, url?: string | null }> }> };
 
 export type CategoryUpdateMutationVariables = Exact<{
   sk: Scalars['String'];
@@ -284,8 +285,16 @@ export const CategoryListDocument = gql`
   categoryList {
     pk
     sk
-    name
     description
+    name
+    bookmarks {
+      pk
+      sk
+      description
+      favorite
+      name
+      url
+    }
   }
 }
     `;
