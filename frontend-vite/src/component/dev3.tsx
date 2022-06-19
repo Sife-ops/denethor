@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useCategoryFormState } from '../hook/category-form';
 
 import {
   CategoriesState,
@@ -9,18 +10,27 @@ import {
 import {
   useCategoryCreateMutation,
   useCategoryListQuery,
+  useCategoryUpdateMutation,
+  useCategoryDeleteMutation,
+  Category as CategoryType,
 } from '../generated/graphql';
 
 const Category: React.FC<{
   category: CategorySelectable;
   categoriesState: CategoriesState;
-}> = ({ category, categoriesState: { categoryToggle } }) => {
+  type: 'categoryList' | 'bookmarkCategoryList';
+}> = ({ category, categoriesState: { categoryToggle }, type }) => {
+  const [editing, setEditing] = useState(false);
+
   const handleClick = () => {
     categoryToggle(category);
   };
 
   return (
     <div>
+      {type === 'categoryList' && (
+        <button onClick={() => setEditing((s) => !s)}>edit</button>
+      )}
       <label>
         <input
           type="checkbox"
@@ -29,23 +39,26 @@ const Category: React.FC<{
         />
         {category.name}
       </label>
+      {/* <br /> */}
+      {editing && <CategoryForm category={category} setEditing={setEditing} />}
     </div>
   );
 };
 
 const Categories: React.FC<{
-  categories: CategorySelectable[];
   categoriesState: CategoriesState;
-}> = (p) => {
-  if (p.categories.length < 1) {
+  type: 'categoryList' | 'bookmarkCategoryList';
+}> = ({ categoriesState, type }) => {
+  if (categoriesState.categories.length < 1) {
     return <div>no categories</div>;
   }
 
-  const categories = p.categories.map((category) => (
+  const categories = categoriesState.categories.map((category) => (
     <Category
       key={category.sk}
       category={category}
-      categoriesState={p.categoriesState}
+      categoriesState={categoriesState}
+      type={type}
     />
   ));
 
@@ -55,78 +68,101 @@ const Categories: React.FC<{
   );
 };
 
-const useCategoryFormState = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+const CategoryForm: React.FC<{
+  category?: CategoryType;
+  setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
+}> = (p) => {
+  const { description, name, reset, setDescription, setName } =
+    useCategoryFormState();
 
-  const reset = () => {
-    setName('');
-    setDescription('');
+  const [_, categoryCreate] = useCategoryCreateMutation();
+  const [__, categoryUpdate] = useCategoryUpdateMutation();
+  const [___, categoryDelete] = useCategoryDeleteMutation();
+
+  useEffect(() => {
+    if (p.category) {
+      setName(p.category.name);
+      setDescription(p.category.description);
+    }
+  }, []);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    let res;
+    if (p.category) {
+      res = await categoryUpdate({
+        description,
+        name,
+        sk: p.category.sk,
+      });
+    } else {
+      res = await categoryCreate({
+        description,
+        name,
+      });
+    }
+    console.log(res);
+    if (!res.error) {
+      if (p.setEditing) {
+        p.setEditing(false);
+      }
+      reset();
+    } else {
+      console.error(res.error);
+    }
   };
 
-  return {
-    description,
-    name,
-    reset,
-    setDescription,
-    setName,
+  const handleDelete = async (e: any) => {
+    e.preventDefault();
+    const res = await categoryDelete({
+      sk: p.category?.sk!,
+    });
+    console.log(res);
   };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        placeholder="name"
+        value={name}
+        onChange={(e) => {
+          setName(e.target.value);
+        }}
+      />
+      <br />
+      <input
+        placeholder="description"
+        value={description}
+        onChange={(e) => {
+          setDescription(e.target.value);
+        }}
+      />
+      <br />
+      <button type={'submit'}>submit</button>
+      {p.category && <button onClick={handleDelete}>delete</button>}
+    </form>
+  );
 };
 
 export const Dev3: React.FC = () => {
   const [categoryListRes] = useCategoryListQuery();
 
   const categoriesState = useCategoriesState();
-  const { categories, categoriesUpdate } = categoriesState;
-
-  const [_, categoryCreate] = useCategoryCreateMutation();
-  const categoryFormState = useCategoryFormState();
+  //   const { categoriesUpdate } = categoriesState;
 
   useEffect(() => {
     const { fetching, data } = categoryListRes;
     if (!fetching && data) {
-      categoriesUpdate(data.categoryList);
+      categoriesState.categoriesUpdate(data.categoryList);
     }
   }, [categoryListRes.data]);
 
   return (
     <div>
       <h1>Categories</h1>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const { description, name, reset } = categoryFormState;
-          const res = await categoryCreate({
-            name,
-            description,
-          });
-          if (!res.error) {
-            reset();
-          } else {
-            console.error(res.error);
-          }
-        }}
-      >
-        <input
-          placeholder="name"
-          value={categoryFormState.name}
-          onChange={(e) => {
-            categoryFormState.setName(e.target.value);
-          }}
-        />
-        <br />
-        <input
-          placeholder="description"
-          value={categoryFormState.description}
-          onChange={(e) => {
-            categoryFormState.setDescription(e.target.value);
-          }}
-        />
-        <br />
-        <button type={'submit'}>submit</button>
-      </form>
+      <CategoryForm />
       <br />
-      <Categories categories={categories} categoriesState={categoriesState} />
+      <Categories categoriesState={categoriesState} type={'categoryList'} />
     </div>
   );
 };
