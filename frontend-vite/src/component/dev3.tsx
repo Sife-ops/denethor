@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import {
-  Category as CategoryType,
-  useCategoryListQuery,
-  useCategoryCreateMutation,
-} from '../generated/graphql';
 
-interface CategorySelectable extends CategoryType {
-  selected: boolean;
-}
+import {
+  CategoriesState,
+  CategorySelectable,
+  useCategoriesState,
+} from '../hook/categories';
+
+import {
+  useCategoryCreateMutation,
+  useCategoryListQuery,
+} from '../generated/graphql';
 
 const Category: React.FC<{
   category: CategorySelectable;
@@ -53,72 +55,19 @@ const Categories: React.FC<{
   );
 };
 
-interface CategoriesState {
-  categories: CategorySelectable[];
-  categoryToggle: (category: CategoryType | string) => void;
-  setCategories: React.Dispatch<React.SetStateAction<CategorySelectable[]>>;
-  categoriesUpdate: (categories: CategoryType[]) => void;
-}
-
-const useCategoriesState = (): CategoriesState => {
-  const [categories, setCategories] = useState<CategorySelectable[]>([]);
-
-  const categoriesUpdate = (categories: CategoryType[]) => {
-    setCategories((state) => {
-      return categories.map((category) => {
-        const found = state.find((c) => c.sk === category.sk);
-        if (found) {
-          return {
-            ...category,
-            selected: found.selected,
-          };
-        } else {
-          return {
-            ...category,
-            selected: false,
-          };
-        }
-      });
-    });
-  };
-
-  const categoryToggle = (category: CategoryType | string) => {
-    let sk: string;
-    if (typeof category === 'string') {
-      sk = category;
-    } else {
-      sk = category.sk;
-    }
-
-    setCategories((state) =>
-      state.map((category) => {
-        if (category.sk === sk) {
-          return {
-            ...category,
-            selected: !category.selected,
-          };
-        } else {
-          return category;
-        }
-      })
-    );
-  };
-
-  return {
-    categories,
-    categoryToggle,
-    setCategories,
-    categoriesUpdate,
-  };
-};
-
 const useCategoryFormState = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
+  const reset = () => {
+    setName('');
+    setDescription('');
+  };
+
   return {
     description,
     name,
+    reset,
     setDescription,
     setName,
   };
@@ -146,12 +95,16 @@ export const Dev3: React.FC = () => {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          const { description, name } = categoryFormState;
+          const { description, name, reset } = categoryFormState;
           const res = await categoryCreate({
             name,
             description,
           });
-          console.log(res);
+          if (!res.error) {
+            reset();
+          } else {
+            console.error(res.error);
+          }
         }}
       >
         <input
