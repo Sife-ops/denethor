@@ -1,0 +1,30 @@
+mutation BookmarkUpdate(
+  $categories: [String!]!
+  $description: String!
+  $favorite: Boolean!
+  $name: String!
+  $sk: String!
+  $url: String!
+) {
+  bookmarkUpdate(
+    categories: $categories
+    description: $description
+    favorite: $favorite
+    name: $name
+    sk: $sk
+    url: $url
+  ) {
+    pk
+    sk
+    description
+    favorite
+    name
+    url
+    categories {
+      pk
+      sk
+      description
+      name
+    }
+  }
+}

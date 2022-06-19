@@ -4,6 +4,7 @@ import { bookmark } from "./bookmark";
 import { bookmarkCreate } from "./bookmark-create";
 import { bookmarkDelete } from "./bookmark-delete";
 import { bookmarkList } from "./bookmark-list";
+import { bookmarkUpdate } from "./bookmark-update";
 import { category } from "./category";
 import { categoryCreate } from "./category-create";
 import { categoryDelete } from "./category-delete";
@@ -15,6 +16,7 @@ const schemaArrays = [
   bookmarkCreate,
   bookmarkDelete,
   bookmarkList,
+  bookmarkUpdate,
   categoryCreate,
   categoryDelete,
   categoryList,

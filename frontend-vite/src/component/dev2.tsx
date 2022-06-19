@@ -9,6 +9,7 @@ import {
   useBookmarkListQuery,
   Category,
   useBookmarkDeleteMutation,
+  useBookmarkUpdateMutation,
 } from "../generated/graphql";
 
 export const Dev2: React.FC = () => {
@@ -27,6 +28,7 @@ export const Dev2: React.FC = () => {
   const [categoryListRes] = useCategoryListQuery();
   // const [bookmarkListRes] = useBookmarkListQuery();
   const [___, bookmarkDelete] = useBookmarkDeleteMutation();
+  const [____, bookmarkUpdate] = useBookmarkUpdateMutation();
 
   React.useEffect(() => {
     if (categoryListRes.fetching === false && categoryListRes.data) {
@@ -88,7 +90,7 @@ export const Dev2: React.FC = () => {
           </div>
         ))}
 
-      <h1>bookmark create</h1>
+      <h1>bookmark create/update</h1>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -128,8 +130,24 @@ export const Dev2: React.FC = () => {
           checked={favorite}
         />
         <br />
-        <button type="submit">submit</button>
+        <button type="submit">create</button>
       </form>
+      <button
+        onClick={async () => {
+          const res = await bookmarkUpdate({
+            sk,
+            name,
+            url,
+            description,
+            favorite,
+            categories: categories
+              .filter((e) => e.selected === true)
+              .map((e) => e.sk),
+          });
+        }}
+      >
+        update
+      </button>
 
       <h1>category create</h1>
       <form

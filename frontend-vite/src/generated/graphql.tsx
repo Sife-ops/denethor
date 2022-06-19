@@ -38,6 +38,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   bookmarkCreate: Bookmark;
   bookmarkDelete: Scalars['Boolean'];
+  bookmarkUpdate: Bookmark;
   categoryCreate: Category;
   categoryDelete: Category;
   categoryUpdate: Category;
@@ -55,6 +56,16 @@ export type MutationBookmarkCreateArgs = {
 
 export type MutationBookmarkDeleteArgs = {
   sk: Scalars['String'];
+};
+
+
+export type MutationBookmarkUpdateArgs = {
+  categories: Array<Scalars['String']>;
+  description: Scalars['String'];
+  favorite: Scalars['Boolean'];
+  name: Scalars['String'];
+  sk: Scalars['String'];
+  url: Scalars['String'];
 };
 
 
@@ -104,6 +115,18 @@ export type BookmarkListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type BookmarkListQuery = { __typename?: 'Query', bookmarkList: Array<{ __typename?: 'Bookmark', pk?: string | null, sk: string, description?: string | null, favorite?: boolean | null, name?: string | null, url?: string | null, categories?: Array<{ __typename?: 'Category', pk?: string | null, sk: string, description?: string | null, name?: string | null }> | null }> };
+
+export type BookmarkUpdateMutationVariables = Exact<{
+  categories: Array<Scalars['String']> | Scalars['String'];
+  description: Scalars['String'];
+  favorite: Scalars['Boolean'];
+  name: Scalars['String'];
+  sk: Scalars['String'];
+  url: Scalars['String'];
+}>;
+
+
+export type BookmarkUpdateMutation = { __typename?: 'Mutation', bookmarkUpdate: { __typename?: 'Bookmark', pk?: string | null, sk: string, description?: string | null, favorite?: boolean | null, name?: string | null, url?: string | null, categories?: Array<{ __typename?: 'Category', pk?: string | null, sk: string, description?: string | null, name?: string | null }> | null } };
 
 export type CategoryCreateMutationVariables = Exact<{
   name: Scalars['String'];
@@ -198,6 +221,35 @@ export const BookmarkListDocument = gql`
 
 export function useBookmarkListQuery(options?: Omit<Urql.UseQueryArgs<BookmarkListQueryVariables>, 'query'>) {
   return Urql.useQuery<BookmarkListQuery>({ query: BookmarkListDocument, ...options });
+};
+export const BookmarkUpdateDocument = gql`
+    mutation BookmarkUpdate($categories: [String!]!, $description: String!, $favorite: Boolean!, $name: String!, $sk: String!, $url: String!) {
+  bookmarkUpdate(
+    categories: $categories
+    description: $description
+    favorite: $favorite
+    name: $name
+    sk: $sk
+    url: $url
+  ) {
+    pk
+    sk
+    description
+    favorite
+    name
+    url
+    categories {
+      pk
+      sk
+      description
+      name
+    }
+  }
+}
+    `;
+
+export function useBookmarkUpdateMutation() {
+  return Urql.useMutation<BookmarkUpdateMutation, BookmarkUpdateMutationVariables>(BookmarkUpdateDocument);
 };
 export const CategoryCreateDocument = gql`
     mutation CategoryCreate($name: String!, $description: String) {
