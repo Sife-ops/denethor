@@ -10,6 +10,7 @@ export interface CategoriesState {
   categories: CategoryUI[];
   categoriesUpdate: (categories: Category[]) => void;
   categoryEdit: (category: Category | string) => void;
+  categoryEditCancel: () => void;
   categorySelect: (category: Category | string) => void;
   setCategories: React.Dispatch<React.SetStateAction<CategoryUI[]>>;
 }
@@ -79,8 +80,18 @@ export const useCategoriesState = (): CategoriesState => {
     categoryToggle('editing', category);
   };
 
+  const categoryEditCancel = () => {
+    setCategories((state) =>
+      state.map((e) => ({
+        ...e,
+        editing: false,
+      }))
+    );
+  };
+
   return {
     categories,
+    categoryEditCancel,
     categoriesUpdate,
     categoryEdit,
     categorySelect,

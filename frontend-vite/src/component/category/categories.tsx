@@ -52,12 +52,14 @@ const Category: React.FC<{
   category: CategoryUI;
   categoriesState: CategoriesState;
   showEdit: boolean;
-}> = ({ category, categoriesState: { categorySelect }, showEdit }) => {
-  const [editing, setEditing] = useState(false);
-
+}> = ({
+  category,
+  categoriesState: { categoryEdit, categoryEditCancel, categorySelect },
+  showEdit,
+}) => {
   useEffect(() => {
     if (!showEdit) {
-      setEditing(false);
+      categoryEditCancel();
     }
   }, [showEdit]);
 
@@ -78,12 +80,15 @@ const Category: React.FC<{
         </label>
       </div>
       {showEdit && (
-        <button style={mrb} onClick={() => setEditing((s) => !s)}>
+        <button style={mrb} onClick={() => categoryEdit(category)}>
           edit
         </button>
       )}
-      {showEdit && editing && (
-        <CategoryForm category={category} setEditing={setEditing} />
+      {showEdit && category.editing && (
+        <CategoryForm
+          category={category}
+          categoryEditCancel={categoryEditCancel}
+        />
       )}
     </div>
   );
