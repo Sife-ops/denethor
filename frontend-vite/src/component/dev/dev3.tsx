@@ -1,7 +1,7 @@
-import { Categories } from './category/categories';
-import { CategoryForm } from './category/category-form';
-import { useCategoriesState } from '../hook/categories';
-import { useCategoryListQuery } from '../generated/graphql';
+import { Categories } from '../category/categories';
+import { CategoryForm } from '../category/category-form';
+import { useCategoriesState } from '../../hook/categories';
+import { useCategoryListQuery } from '../../generated/graphql';
 import { useEffect } from 'react';
 
 export const Dev3: React.FC = () => {

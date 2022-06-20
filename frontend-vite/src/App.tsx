@@ -1,9 +1,9 @@
 import "./App.css";
 import React from "react";
 import { Auth } from "aws-amplify";
-import { Dev } from "./component/dev";
-import { Dev2 } from "./component/dev2";
-import { Dev3 } from "./component/dev3";
+import { Dev } from "./component/dev/dev";
+import { Dev2 } from "./component/dev/dev2";
+import { Dev3 } from "./component/dev/dev3";
 import { Dev4 } from "./component/dev/dev4";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { SignIn } from "./component/sign-in";

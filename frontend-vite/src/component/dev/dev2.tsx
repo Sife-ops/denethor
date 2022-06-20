@@ -10,7 +10,7 @@ import {
   Category,
   useBookmarkDeleteMutation,
   useBookmarkUpdateMutation,
-} from "../generated/graphql";
+} from "../../generated/graphql";
 
 export const Dev2: React.FC = () => {
   const [description, setDescription] = React.useState("");
