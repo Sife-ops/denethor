@@ -1,23 +1,22 @@
-import jwt_decode, { JwtPayload } from "jwt-decode";
-import { APIGatewayEvent } from "aws-lambda";
-import { ApolloServer } from "apollo-server-lambda";
-import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-import { Context, typeDefs, resolvers } from "../lib/graphql";
+import jwt_decode, { JwtPayload } from 'jwt-decode';
+import { APIGatewayEvent } from 'aws-lambda';
+import { ApolloServer } from 'apollo-server-lambda';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
+import { Context, schema } from '../lib/graphql';
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
   context: ({ event }: { event: APIGatewayEvent }): Context => {
     const { authorization } = event.headers;
 
     if (!authorization) {
-      throw new Error("no authorization header");
+      throw new Error('no authorization header');
     }
 
     const decoded = jwt_decode<JwtPayload>(authorization);
 
     if (!decoded.sub) {
-      throw new Error("userId undefined");
+      throw new Error('userId undefined');
     }
 
     return {

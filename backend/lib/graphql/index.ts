@@ -1,4 +1,5 @@
 import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 
 import { bookmark } from './bookmark';
 import { bookmarkCreate } from './bookmark-create';
@@ -13,7 +14,7 @@ import { categoryUpdate } from './category-update';
 import { hello } from './hello';
 import { netscapeImport } from './netscape-import';
 
-const schemaArrays = [
+const schemas = [
   bookmark,
   bookmarkCreate,
   bookmarkDelete,
@@ -26,27 +27,14 @@ const schemaArrays = [
   categoryUpdate,
   hello,
   netscapeImport,
-].reduce(
-  (
-    a: {
-      typeArray: any[];
-      resolverArray: any[];
-    },
-    c
-  ) => {
-    return {
-      typeArray: [...a.typeArray, c.typeDef],
-      resolverArray: [...a.resolverArray, c.resolver],
-    };
-  },
-  {
-    typeArray: [],
-    resolverArray: [],
-  }
-);
+];
 
-export const typeDefs = mergeTypeDefs([...schemaArrays.typeArray]);
+const typeDefs = mergeTypeDefs(schemas.map((e) => e.typeDef));
+const resolvers = mergeResolvers(schemas.map((e) => e.resolver));
 
-export const resolvers = mergeResolvers(schemaArrays.resolverArray);
+export const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
 
 export { Context } from './context';
