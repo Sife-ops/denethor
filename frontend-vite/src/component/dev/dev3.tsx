@@ -1,5 +1,4 @@
 import { Categories } from '../category/categories';
-import { CategoryForm } from '../category/category-form';
 import { useCategoriesState } from '../../hook/categories';
 import { useCategoryListQuery } from '../../generated/graphql';
 import { useEffect } from 'react';
@@ -19,8 +18,6 @@ export const Dev3: React.FC = () => {
   return (
     <div>
       <h1>Categories</h1>
-      <CategoryForm />
-      <br />
       <Categories categoriesState={categoriesState} type={'categoryList'} />
     </div>
   );

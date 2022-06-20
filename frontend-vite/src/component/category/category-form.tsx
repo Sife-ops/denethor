@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { mrb } from '../../style/margin';
 import { useCategoryFormState } from '../../hook/category-form';
+import { useEffect } from 'react';
 
 import {
   useCategoryCreateMutation,
@@ -65,6 +66,7 @@ export const CategoryForm: React.FC<{
       <input
         placeholder="name"
         value={name}
+        style={mrb}
         onChange={(e) => {
           setName(e.target.value);
         }}
@@ -73,12 +75,15 @@ export const CategoryForm: React.FC<{
       <input
         placeholder="description"
         value={description}
+        style={mrb}
         onChange={(e) => {
           setDescription(e.target.value);
         }}
       />
       <br />
-      <button type={'submit'}>submit</button>
+      <button style={mrb} type={'submit'}>
+        submit
+      </button>
       {p.category && <button onClick={handleDelete}>delete</button>}
     </form>
   );
