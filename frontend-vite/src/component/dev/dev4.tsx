@@ -6,11 +6,11 @@ import {
 } from '../../generated/graphql';
 
 export const Dev4: React.FC = () => {
-  const [res] = useCategoryListQuery();
-  const [res2] = useBookmarkListQuery();
+  const [categoryListRes] = useCategoryListQuery();
+  const [bookmarkListRes] = useBookmarkListQuery();
 
+  // firefox backup
   const [file, setFile] = useState('');
-
   const handleImport = (e: any) => {
     const fileReader = new FileReader();
     fileReader.readAsText(e.target.files[0], 'UTF-8');
@@ -18,23 +18,30 @@ export const Dev4: React.FC = () => {
       setFile(e.target.result);
     };
   };
-
-  const fun = (a: any[]) => {
-    let acc = 0;
+  const fun = (
+    a: any[]
+  ): Array<{ iconuri: string; title: string; uri: string }> => {
+    let acc: any[] = [];
     for (let i = 0; i < a.length; i++) {
-      const children = a[i].children;
+      const { children, uri, title, iconuri } = a[i];
       if (children && children.length > 0) {
-        acc = acc + fun(children);
+        acc = [...acc, ...fun(children)];
       }
-      acc = acc + 1;
+      if (uri) {
+        acc = [
+          ...acc,
+          {
+            uri,
+            title,
+            iconuri,
+          },
+        ];
+      }
     }
     return acc;
   };
-
   useEffect(() => {
-    //
     if (file) {
-      //
       try {
         const a = JSON.parse(file);
         console.log(a);
@@ -54,7 +61,7 @@ export const Dev4: React.FC = () => {
       <h1>bookmark list</h1>
       <button
         onClick={() => {
-          console.log(res2.data?.bookmarkList);
+          console.log(bookmarkListRes.data?.bookmarkList);
         }}
       >
         test
@@ -63,7 +70,7 @@ export const Dev4: React.FC = () => {
       <h1>category list</h1>
       <button
         onClick={() => {
-          console.log(res.data?.categoryList);
+          console.log(categoryListRes.data?.categoryList);
         }}
       >
         test
