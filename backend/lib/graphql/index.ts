@@ -1,5 +1,5 @@
-import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 
 import { bookmark } from './bookmark';
 import { bookmarkCreate } from './bookmark-create';
