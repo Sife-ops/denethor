@@ -11,6 +11,7 @@ import { categoryDelete } from './category-delete';
 import { categoryList } from './category-list';
 import { categoryUpdate } from './category-update';
 import { hello } from './hello';
+import { netscapeImport } from './netscape-import';
 
 const schemaArrays = [
   bookmark,
@@ -24,6 +25,7 @@ const schemaArrays = [
   categoryList,
   categoryUpdate,
   hello,
+  netscapeImport,
 ].reduce(
   (
     a: {

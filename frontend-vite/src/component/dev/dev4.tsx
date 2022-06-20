@@ -3,14 +3,38 @@ import React, { useState, useEffect } from 'react';
 import {
   useCategoryListQuery,
   useBookmarkListQuery,
+  useNetscapeImportMutation,
 } from '../../generated/graphql';
 
 export const Dev4: React.FC = () => {
   const [categoryListRes] = useCategoryListQuery();
   const [bookmarkListRes] = useBookmarkListQuery();
+  const [_, netscapeImport] = useNetscapeImportMutation();
 
-  // firefox backup
   const [file, setFile] = useState('');
+
+  useEffect(() => {
+    if (file) {
+      console.log(file);
+      // const a = cheerio.load(file)
+
+      // try {
+      //   // const a = bookmarksToJSON(file);
+      //   // console.log(a);
+      // } catch {
+      //   console.error('frick');
+      // }
+
+      // try {
+      //   const a = JSON.parse(file);
+      //   console.log(a);
+      //   console.log(fun(a.children));
+      // } catch {
+      //   console.error('bad file');
+      // }
+    }
+  }, [file]);
+
   const handleImport = (e: any) => {
     const fileReader = new FileReader();
     fileReader.readAsText(e.target.files[0], 'UTF-8');
@@ -18,6 +42,8 @@ export const Dev4: React.FC = () => {
       setFile(e.target.result);
     };
   };
+
+  // firefox backup
   const fun = (
     a: any[]
   ): Array<{ iconuri: string; title: string; uri: string }> => {
@@ -40,23 +66,24 @@ export const Dev4: React.FC = () => {
     }
     return acc;
   };
-  useEffect(() => {
-    if (file) {
-      try {
-        const a = JSON.parse(file);
-        console.log(a);
-        console.log(fun(a.children));
-      } catch {
-        console.error('bad file');
-      }
-    }
-  }, [file]);
 
   return (
     <div>
       <h1>import</h1>
       <input type={'file'} onChange={handleImport} />
-      <div>{file}</div>
+      <button
+        onClick={async () => {
+          const res = await netscapeImport({
+            html: file,
+          });
+          if (res.data) {
+            const json = JSON.parse(res.data.netscapeImport);
+            console.log(json);
+          }
+        }}
+      >
+        test
+      </button>
 
       <h1>bookmark list</h1>
       <button

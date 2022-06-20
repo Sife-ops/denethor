@@ -43,6 +43,7 @@ export type Mutation = {
   categoryCreate: Category;
   categoryDelete: Scalars['Boolean'];
   categoryUpdate: Category;
+  netscapeImport: Scalars['String'];
 };
 
 
@@ -85,6 +86,11 @@ export type MutationCategoryUpdateArgs = {
   description: Scalars['String'];
   name: Scalars['String'];
   sk: Scalars['String'];
+};
+
+
+export type MutationNetscapeImportArgs = {
+  html: Scalars['String'];
 };
 
 export type Query = {
@@ -162,6 +168,13 @@ export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type HelloQuery = { __typename?: 'Query', hello?: string | null };
+
+export type NetscapeImportMutationVariables = Exact<{
+  html: Scalars['String'];
+}>;
+
+
+export type NetscapeImportMutation = { __typename?: 'Mutation', netscapeImport: string };
 
 
 export const BookmarkCreateDocument = gql`
@@ -319,4 +332,13 @@ export const HelloDocument = gql`
 
 export function useHelloQuery(options?: Omit<Urql.UseQueryArgs<HelloQueryVariables>, 'query'>) {
   return Urql.useQuery<HelloQuery>({ query: HelloDocument, ...options });
+};
+export const NetscapeImportDocument = gql`
+    mutation netscapeImport($html: String!) {
+  netscapeImport(html: $html)
+}
+    `;
+
+export function useNetscapeImportMutation() {
+  return Urql.useMutation<NetscapeImportMutation, NetscapeImportMutationVariables>(NetscapeImportDocument);
 };
