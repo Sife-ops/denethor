@@ -14,7 +14,7 @@ import {
 
 export const Dev2: React.FC = () => {
   const [description, setDescription] = React.useState("");
-  const [name, setName] = React.useState("");
+  const [title, setTitle] = React.useState("");
   const [url, setUrl] = React.useState("");
   const [favorite, setFavorite] = React.useState(false);
   const [sk, setSk] = React.useState("");
@@ -69,7 +69,7 @@ export const Dev2: React.FC = () => {
       {categories.length > 0 &&
         categories.map((category) => (
           <div key={category.sk}>
-            <label>{category.name}</label>
+            <label>{category.title}</label>
             <input
               checked={category.selected}
               type={"checkbox"}
@@ -97,7 +97,7 @@ export const Dev2: React.FC = () => {
           const res = await bookmarkCreate({
             description,
             favorite,
-            name,
+            title,
             url,
             categories: categories
               .filter((e) => e.selected === true)
@@ -107,9 +107,9 @@ export const Dev2: React.FC = () => {
         }}
       >
         <input
-          placeholder="name"
-          onChange={(e) => setName(e.target.value)}
-          value={name}
+          placeholder="title"
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
         />
         <br />
         <input
@@ -136,7 +136,7 @@ export const Dev2: React.FC = () => {
         onClick={async () => {
           const res = await bookmarkUpdate({
             sk,
-            name,
+            title,
             url,
             description,
             favorite,
@@ -154,16 +154,16 @@ export const Dev2: React.FC = () => {
         onSubmit={async (e) => {
           e.preventDefault();
           const res = await categoryCreate({
-            name,
+            title,
             description,
           });
           console.log(res);
         }}
       >
         <input
-          placeholder="name"
-          onChange={(e) => setName(e.target.value)}
-          value={name}
+          placeholder="title"
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
         />
         <br />
         <input

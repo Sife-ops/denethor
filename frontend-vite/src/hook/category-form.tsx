@@ -1,19 +1,19 @@
 import { useState } from 'react';
 
 export const useCategoryFormState = () => {
-  const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   const reset = () => {
-    setName('');
+    setTitle('');
     setDescription('');
   };
 
   return {
     description,
-    name,
+    title,
     reset,
     setDescription,
-    setName,
+    setTitle,
   };
 };

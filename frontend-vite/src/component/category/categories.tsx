@@ -68,7 +68,7 @@ const Category: React.FC<{
             checked={category.selected}
             onChange={handleChange}
           />
-          {category.name}
+          {category.title}
         </label>
       </div>
       {showEdit && (

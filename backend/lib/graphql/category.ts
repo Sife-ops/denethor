@@ -8,7 +8,7 @@ export const category = {
       sk: String!
 
       description: String!
-      name: String!
+      title: String!
 
       bookmarks: [Bookmark!]
     }

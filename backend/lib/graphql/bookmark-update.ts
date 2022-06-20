@@ -9,7 +9,7 @@ export const bookmarkUpdate = {
         categories: [String!]!
         description: String!
         favorite: Boolean!
-        name: String!
+        title: String!
         sk: String!
         url: String!
       ): Bookmark!
@@ -23,14 +23,14 @@ export const bookmarkUpdate = {
           categories,
           description,
           favorite,
-          name,
+          title,
           sk,
           url,
         }: {
           categories: string[];
           description: string;
           favorite: boolean;
-          name: string;
+          title: string;
           sk: string;
           url: string;
         },
@@ -41,7 +41,7 @@ export const bookmarkUpdate = {
           sk,
           description,
           favorite,
-          name,
+          title,
           url,
         });
 

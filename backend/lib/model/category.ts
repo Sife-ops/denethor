@@ -4,7 +4,7 @@ import { EntityClass, entity } from "./entity";
 export class CategoryClass extends EntityClass {
   bookmark?: string;
   description?: string;
-  name?: string;
+  title?: string;
 }
 
 const categorySchema = new dynamoose.Schema({
@@ -16,7 +16,7 @@ const categorySchema = new dynamoose.Schema({
     type: String,
     rangeKey: true,
   },
-  name: {
+  title: {
     type: String,
   },
   description: {

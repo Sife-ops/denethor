@@ -9,7 +9,7 @@ export const bookmark = {
 
       description: String
       favorite: Boolean
-      name: String
+      title: String
       url: String
 
       categories: [Category!]

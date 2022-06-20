@@ -2,7 +2,7 @@ mutation BookmarkUpdate(
   $categories: [String!]!
   $description: String!
   $favorite: Boolean!
-  $name: String!
+  $title: String!
   $sk: String!
   $url: String!
 ) {
@@ -10,7 +10,7 @@ mutation BookmarkUpdate(
     categories: $categories
     description: $description
     favorite: $favorite
-    name: $name
+    title: $title
     sk: $sk
     url: $url
   ) {
@@ -18,13 +18,13 @@ mutation BookmarkUpdate(
     sk
     description
     favorite
-    name
+    title
     url
     categories {
       pk
       sk
       description
-      name
+      title
     }
   }
 }

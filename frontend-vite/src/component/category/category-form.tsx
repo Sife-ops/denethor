@@ -13,7 +13,7 @@ export const CategoryForm: React.FC<{
   category?: Category;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
 }> = (p) => {
-  const { description, name, reset, setDescription, setName } =
+  const { description, title, reset, setDescription, setTitle } =
     useCategoryFormState();
 
   const [_, categoryCreate] = useCategoryCreateMutation();
@@ -22,7 +22,7 @@ export const CategoryForm: React.FC<{
 
   useEffect(() => {
     if (p.category) {
-      setName(p.category.name);
+      setTitle(p.category.title);
       setDescription(p.category.description);
     }
   }, []);
@@ -33,13 +33,13 @@ export const CategoryForm: React.FC<{
     if (p.category) {
       res = await categoryUpdate({
         description,
-        name,
+        title,
         sk: p.category.sk,
       });
     } else {
       res = await categoryCreate({
         description,
-        name,
+        title,
       });
     }
     console.log(res);
@@ -64,11 +64,11 @@ export const CategoryForm: React.FC<{
   return (
     <form onSubmit={handleSubmit}>
       <input
-        placeholder="name"
-        value={name}
+        placeholder="title"
+        value={title}
         style={mrb}
         onChange={(e) => {
-          setName(e.target.value);
+          setTitle(e.target.value);
         }}
       />
       <br />

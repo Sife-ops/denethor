@@ -6,20 +6,20 @@ import { gql } from "apollo-server-lambda";
 export const categoryCreate = {
   typeDef: gql`
     type Mutation {
-      categoryCreate(name: String!, description: String): Category!
+      categoryCreate(title: String!, description: String): Category!
     }
   `,
   resolver: {
     Mutation: {
       categoryCreate: async (
         _: any,
-        { description, name }: { description?: string; name: string },
+        { description, title }: { description?: string; title: string },
         { userId }: Context
       ) => {
         const response = await model.category.create({
           pk: `user:${userId}`,
           sk: `category:${crypto.randomUUID()}`,
-          name,
+          title,
           description,
         });
 

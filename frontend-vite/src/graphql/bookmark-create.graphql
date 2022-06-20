@@ -2,27 +2,27 @@ mutation BookmarkCreate(
   $categories: [String!]!
   $description: String!
   $favorite: Boolean!
-  $name: String!
+  $title: String!
   $url: String!
 ) {
   bookmarkCreate(
     categories: $categories
     description: $description
     favorite: $favorite
-    name: $name
+    title: $title
     url: $url
   ) {
     pk
     sk
     description
     favorite
-    name
+    title
     url
     categories {
       pk
       sk
       description
-      name
+      title
     }
   }
 }

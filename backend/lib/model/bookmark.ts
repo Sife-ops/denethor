@@ -4,7 +4,7 @@ import { EntityClass, entity } from "./entity";
 export class BookmarkClass extends EntityClass {
   description: string;
   favorite: boolean;
-  name: string;
+  title: string;
   url: string;
 }
 
@@ -17,7 +17,7 @@ const bookmarkSchema = new dynamoose.Schema({
     type: String,
     rangeKey: true,
   },
-  name: {
+  title: {
     type: String,
   },
   description: {

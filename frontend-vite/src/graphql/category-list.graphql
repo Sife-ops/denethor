@@ -4,7 +4,7 @@ query CategoryList {
     sk
 
     description
-    name
+    title
 
     bookmarks {
       pk
@@ -12,7 +12,7 @@ query CategoryList {
 
       description
       favorite
-      name
+      title
       url
     }
   }

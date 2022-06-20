@@ -10,7 +10,7 @@ export const bookmarkCreate = {
         categories: [String!]!
         description: String!
         favorite: Boolean!
-        name: String!
+        title: String!
         url: String!
       ): Bookmark!
     }
@@ -23,13 +23,13 @@ export const bookmarkCreate = {
           categories,
           description,
           favorite,
-          name,
+          title,
           url,
         }: {
           categories: string[];
           description: string;
           favorite: boolean;
-          name: string;
+          title: string;
           url: string;
         },
         { userId }: Context
@@ -39,7 +39,7 @@ export const bookmarkCreate = {
           sk: `bookmark:${crypto.randomUUID()}`,
           description,
           favorite,
-          name,
+          title,
           url,
         });
 

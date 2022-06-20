@@ -7,7 +7,7 @@ export const categoryUpdate = {
     type Mutation {
       categoryUpdate(
         sk: String!
-        name: String!
+        title: String!
         description: String!
       ): Category!
     }
@@ -18,24 +18,24 @@ export const categoryUpdate = {
         _: any,
         {
           description,
-          name,
+          title,
           sk,
         }: {
           description: string;
-          name: string;
+          title: string;
           sk: string;
         },
         { userId }: Context
       ): Promise<CategoryClass> => {
-        if (!name) {
-          throw new Error('invalid arguments: name');
+        if (!title) {
+          throw new Error('invalid arguments: title');
         }
 
         const response = await model.category.update({
           pk: `user:${userId}`,
           sk,
           description,
-          name,
+          title,
         });
 
         console.log('category update', response);
