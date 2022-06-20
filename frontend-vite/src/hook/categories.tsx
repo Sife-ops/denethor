@@ -1,19 +1,21 @@
 import { Category } from '../generated/graphql';
 import { useState } from 'react';
 
-export interface CategorySelectable extends Category {
+export interface CategoryUI extends Category {
   selected: boolean;
+  editing: boolean;
 }
 
 export interface CategoriesState {
-  categories: CategorySelectable[];
-  categoryToggle: (category: Category | string) => void;
-  setCategories: React.Dispatch<React.SetStateAction<CategorySelectable[]>>;
+  categories: CategoryUI[];
   categoriesUpdate: (categories: Category[]) => void;
+  categoryEdit: (category: Category | string) => void;
+  categorySelect: (category: Category | string) => void;
+  setCategories: React.Dispatch<React.SetStateAction<CategoryUI[]>>;
 }
 
 export const useCategoriesState = (): CategoriesState => {
-  const [categories, setCategories] = useState<CategorySelectable[]>([]);
+  const [categories, setCategories] = useState<CategoryUI[]>([]);
 
   const categoriesUpdate = (categories: Category[]) => {
     setCategories((state) => {
@@ -23,18 +25,24 @@ export const useCategoriesState = (): CategoriesState => {
           return {
             ...category,
             selected: found.selected,
+            editing: found.editing,
           };
         } else {
           return {
             ...category,
             selected: false,
+            editing: false,
           };
         }
       });
     });
   };
 
-  const categoryToggle = (category: Category | string) => {
+  const categoryToggle = (
+    property: 'selected' | 'editing',
+    // todo: don't use string
+    category: Category | string
+  ) => {
     let sk: string;
     if (typeof category === 'string') {
       sk = category;
@@ -47,19 +55,35 @@ export const useCategoriesState = (): CategoriesState => {
         if (category.sk === sk) {
           return {
             ...category,
-            selected: !category.selected,
+            [property]: !category[property],
           };
         } else {
-          return category;
+          if (property === 'editing') {
+            return {
+              ...category,
+              editing: false,
+            };
+          } else {
+            return category;
+          }
         }
       })
     );
   };
 
+  const categorySelect = (category: Category | string) => {
+    categoryToggle('selected', category);
+  };
+
+  const categoryEdit = (category: Category | string) => {
+    categoryToggle('editing', category);
+  };
+
   return {
     categories,
-    categoryToggle,
-    setCategories,
     categoriesUpdate,
+    categoryEdit,
+    categorySelect,
+    setCategories,
   };
 };

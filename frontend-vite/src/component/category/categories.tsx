@@ -1,4 +1,4 @@
-import { CategoriesState, CategorySelectable } from '../../hook/categories';
+import { CategoriesState, CategoryUI } from '../../hook/categories';
 import { CategoryForm } from './category-form';
 import { mrb } from '../../style/margin';
 import { useState, useEffect } from 'react';
@@ -49,10 +49,10 @@ export const Categories: React.FC<{
 };
 
 const Category: React.FC<{
-  category: CategorySelectable;
+  category: CategoryUI;
   categoriesState: CategoriesState;
   showEdit: boolean;
-}> = ({ category, categoriesState: { categoryToggle }, showEdit }) => {
+}> = ({ category, categoriesState: { categorySelect }, showEdit }) => {
   const [editing, setEditing] = useState(false);
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const Category: React.FC<{
   }, [showEdit]);
 
   const handleChange = () => {
-    categoryToggle(category);
+    categorySelect(category);
   };
 
   return (
