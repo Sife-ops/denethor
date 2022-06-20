@@ -1,5 +1,5 @@
-import React from "react";
-import { env, tokenKey } from "../../constant";
+import React from 'react';
+import { env, tokenKey } from '../../constant';
 
 export const Dev: React.FC = () => {
   return (
@@ -17,10 +17,10 @@ export const Dev: React.FC = () => {
       <button
         onClick={() => {
           fetch(env.apiGateway.URL, {
-            method: "POST",
+            method: 'POST',
             headers: {
               Authorization: `Bearer ${localStorage.getItem(tokenKey)}`,
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               query: `

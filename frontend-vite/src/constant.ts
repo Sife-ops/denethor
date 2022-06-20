@@ -12,4 +12,4 @@ export const env = {
   },
 };
 
-export const tokenKey = 'denethor'
+export const tokenKey = 'denethor';

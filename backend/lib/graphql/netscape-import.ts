@@ -13,7 +13,7 @@ export const netscapeImport = {
     Mutation: {
       netscapeImport: (_: any, { html }: { html: string }): string => {
         const json = bookmarksToJSON(html);
-        console.log('netscape import',JSON.parse(json));
+        console.log('netscape import', JSON.parse(json));
         return json;
       },
     },

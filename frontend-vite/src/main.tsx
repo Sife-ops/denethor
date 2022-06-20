@@ -1,10 +1,10 @@
-import "./index.css";
-import App from "./App";
-import ReactDOM from "react-dom/client";
-import { Amplify } from "aws-amplify";
-import { BrowserRouter } from "react-router-dom";
-import { Provider as UrqlProvider, createClient } from "urql";
-import { env, tokenKey } from "./constant";
+import './index.css';
+import App from './App';
+import ReactDOM from 'react-dom/client';
+import { Amplify } from 'aws-amplify';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider as UrqlProvider, createClient } from 'urql';
+import { env, tokenKey } from './constant';
 
 Amplify.configure({
   Auth: {
@@ -21,13 +21,13 @@ const client = createClient({
   fetchOptions: () => {
     return {
       headers: {
-        authorization: `Bearer ${localStorage.getItem(tokenKey) || ""}`,
+        authorization: `Bearer ${localStorage.getItem(tokenKey) || ''}`,
       },
     };
   },
 });
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
   <UrqlProvider value={client}>
     <BrowserRouter>

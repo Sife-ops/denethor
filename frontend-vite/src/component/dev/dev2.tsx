@@ -1,5 +1,5 @@
-import React from "react";
-import { Auth } from "aws-amplify";
+import React from 'react';
+import { Auth } from 'aws-amplify';
 
 import {
   useHelloQuery,
@@ -10,14 +10,14 @@ import {
   Category,
   useBookmarkDeleteMutation,
   useBookmarkUpdateMutation,
-} from "../../generated/graphql";
+} from '../../generated/graphql';
 
 export const Dev2: React.FC = () => {
-  const [description, setDescription] = React.useState("");
-  const [title, setTitle] = React.useState("");
-  const [url, setUrl] = React.useState("");
+  const [description, setDescription] = React.useState('');
+  const [title, setTitle] = React.useState('');
+  const [url, setUrl] = React.useState('');
   const [favorite, setFavorite] = React.useState(false);
-  const [sk, setSk] = React.useState("");
+  const [sk, setSk] = React.useState('');
   const [categories, setCategories] = React.useState<
     Array<Category & { selected: boolean }>
   >([]);
@@ -72,7 +72,7 @@ export const Dev2: React.FC = () => {
             <label>{category.title}</label>
             <input
               checked={category.selected}
-              type={"checkbox"}
+              type={'checkbox'}
               onClick={() => {
                 setCategories((state) =>
                   state.map((c) => {
@@ -125,7 +125,7 @@ export const Dev2: React.FC = () => {
         />
         <br />
         <input
-          type={"checkbox"}
+          type={'checkbox'}
           onChange={() => setFavorite((s) => !s)}
           checked={favorite}
         />

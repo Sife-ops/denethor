@@ -1,12 +1,12 @@
-import { Auth } from "aws-amplify";
-import { tokenKey } from "../constant";
-import { useState } from "react";
+import { Auth } from 'aws-amplify';
+import { tokenKey } from '../constant';
+import { useState } from 'react';
 
 export const SignIn: React.FC<{
   setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }> = (p) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
     <div className="App">
@@ -32,7 +32,7 @@ export const SignIn: React.FC<{
             setEmail(e.target.value);
           }}
           value={email}
-          type={"email"}
+          type={'email'}
         />
         <br />
         <input
@@ -40,7 +40,7 @@ export const SignIn: React.FC<{
             setPassword(e.target.value);
           }}
           value={password}
-          type={"password"}
+          type={'password'}
         />
         <br />
         <button type="submit">submit</button>

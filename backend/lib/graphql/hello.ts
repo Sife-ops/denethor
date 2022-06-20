@@ -1,5 +1,5 @@
-import { Context } from "./context";
-import { gql } from "apollo-server-lambda";
+import { Context } from './context';
+import { gql } from 'apollo-server-lambda';
 
 export const hello = {
   typeDef: gql`

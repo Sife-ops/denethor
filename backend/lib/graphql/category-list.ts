@@ -1,6 +1,6 @@
-import model from "../model";
-import { Context } from "./context";
-import { gql } from "apollo-server-lambda";
+import model from '../model';
+import { Context } from './context';
+import { gql } from 'apollo-server-lambda';
 
 export const categoryList = {
   typeDef: gql`
@@ -12,10 +12,10 @@ export const categoryList = {
     Query: {
       categoryList: async (_: any, __: any, { userId }: Context) => {
         const categories = await model.category
-          .query("pk")
+          .query('pk')
           .eq(`user:${userId}`)
-          .where("sk")
-          .beginsWith("category:")
+          .where('sk')
+          .beginsWith('category:')
           .exec();
 
         const response = categories.filter((e) => !e.bookmark);

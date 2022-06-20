@@ -1,7 +1,7 @@
-import crypto from "crypto";
-import model from "../model";
-import { Context } from "./context";
-import { gql } from "apollo-server-lambda";
+import crypto from 'crypto';
+import model from '../model';
+import { Context } from './context';
+import { gql } from 'apollo-server-lambda';
 
 export const bookmarkCreate = {
   typeDef: gql`

@@ -1,14 +1,14 @@
-import "./App.css";
-import React from "react";
-import { Auth } from "aws-amplify";
-import { Dev } from "./component/dev/dev";
-import { Dev2 } from "./component/dev/dev2";
-import { Dev3 } from "./component/dev/dev3";
-import { Dev4 } from "./component/dev/dev4";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import { SignIn } from "./component/sign-in";
-import { SignUp } from "./component/sign-up";
-import { tokenKey } from "./constant";
+import './App.css';
+import React from 'react';
+import { Auth } from 'aws-amplify';
+import { Dev } from './component/dev/dev';
+import { Dev2 } from './component/dev/dev2';
+import { Dev3 } from './component/dev/dev3';
+import { Dev4 } from './component/dev/dev4';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { SignIn } from './component/sign-in';
+import { SignUp } from './component/sign-up';
+import { tokenKey } from './constant';
 
 const Landing: React.FC = () => {
   return <div>landing</div>;
@@ -28,7 +28,7 @@ function App() {
   return (
     <div>
       <ul>
-        <li onClick={() => nav("/")}>landing</li>
+        <li onClick={() => nav('/')}>landing</li>
         {isSignedIn ? (
           <>
             <li
@@ -40,17 +40,17 @@ function App() {
             >
               sign out
             </li>
-            <li onClick={() => nav("/dev2")}>dev2</li>
-            <li onClick={() => nav("/dev3")}>dev3</li>
-            <li onClick={() => nav("/dev4")}>dev4</li>
+            <li onClick={() => nav('/dev2')}>dev2</li>
+            <li onClick={() => nav('/dev3')}>dev3</li>
+            <li onClick={() => nav('/dev4')}>dev4</li>
           </>
         ) : (
           <>
-            <li onClick={() => nav("/signin")}>sign in</li>
-            <li onClick={() => nav("/signup")}>sign up</li>
+            <li onClick={() => nav('/signin')}>sign in</li>
+            <li onClick={() => nav('/signup')}>sign up</li>
           </>
         )}
-        <li onClick={() => nav("/dev")}>dev</li>
+        <li onClick={() => nav('/dev')}>dev</li>
       </ul>
 
       {isSignedIn ? (

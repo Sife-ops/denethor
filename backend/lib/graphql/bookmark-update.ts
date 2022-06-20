@@ -1,6 +1,6 @@
-import model, { CategoryClass } from "../model";
-import { Context } from "./context";
-import { gql } from "apollo-server-lambda";
+import model, { CategoryClass } from '../model';
+import { Context } from './context';
+import { gql } from 'apollo-server-lambda';
 
 export const bookmarkUpdate = {
   typeDef: gql`
@@ -46,9 +46,9 @@ export const bookmarkUpdate = {
         });
 
         const bookmarkCategories: CategoryClass[] = await model.category
-          .query("bookmark")
+          .query('bookmark')
           .eq(sk)
-          .using("categoryBookmarkIndex")
+          .using('categoryBookmarkIndex')
           .exec();
 
         const toDelete = bookmarkCategories.filter(
@@ -96,7 +96,7 @@ export const bookmarkUpdate = {
           };
         }
 
-        console.log("bookmark update", response);
+        console.log('bookmark update', response);
 
         return response;
       },

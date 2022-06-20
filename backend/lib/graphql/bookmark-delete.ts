@@ -1,6 +1,6 @@
-import model from "../model";
-import { Context } from "./context";
-import { gql } from "apollo-server-lambda";
+import model from '../model';
+import { Context } from './context';
+import { gql } from 'apollo-server-lambda';
 
 export const bookmarkDelete = {
   typeDef: gql`
@@ -23,9 +23,9 @@ export const bookmarkDelete = {
 
         // todo: has 'any' type
         const bookmarkCategories = await model.category
-          .query("bookmark")
+          .query('bookmark')
           .eq(sk)
-          .using("categoryBookmarkIndex")
+          .using('categoryBookmarkIndex')
           .exec();
 
         // todo: use batchDelete
@@ -33,7 +33,7 @@ export const bookmarkDelete = {
           await e.delete();
         });
 
-        console.log("bookmark delete", bookmark, bookmarkCategories);
+        console.log('bookmark delete', bookmark, bookmarkCategories);
 
         return true;
       },

@@ -1,7 +1,7 @@
-import crypto from "crypto";
-import model from "../model";
-import { Context } from "./context";
-import { gql } from "apollo-server-lambda";
+import crypto from 'crypto';
+import model from '../model';
+import { Context } from './context';
+import { gql } from 'apollo-server-lambda';
 
 export const categoryCreate = {
   typeDef: gql`
@@ -23,7 +23,7 @@ export const categoryCreate = {
           description,
         });
 
-        console.log("create", response);
+        console.log('create', response);
 
         return response;
       },
