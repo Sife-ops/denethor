@@ -32,7 +32,7 @@ const Category: React.FC<{
 }> = ({ category, categoriesState: { categoryToggle }, type }) => {
   const [editing, setEditing] = useState(false);
 
-  const handleClick = () => {
+  const handleChange = () => {
     categoryToggle(category);
   };
 
@@ -45,7 +45,7 @@ const Category: React.FC<{
         <input
           type="checkbox"
           checked={category.selected}
-          onClick={handleClick}
+          onChange={handleChange}
         />
         {category.name}
       </label>
