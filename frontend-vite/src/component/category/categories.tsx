@@ -1,6 +1,6 @@
 import { CategoriesState, CategoryUI } from '../../hook/categories';
 import { CategoryForm } from './category-form';
-import { mrb } from '../../style/margin';
+import { mr, mrb } from '../../style/margin';
 import { useState, useEffect } from 'react';
 
 export const Categories: React.FC<{
@@ -22,13 +22,43 @@ export const Categories: React.FC<{
   return (
     <div>
       {type === 'categoryList' && (
-        <div>
-          <button style={mrb} onClick={() => setShowAdd((s) => !s)}>
-            add
-          </button>
-          <button style={mrb} onClick={() => setShowEdit((s) => !s)}>
-            edit
-          </button>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <h1 style={mr}>Categories</h1>
+          <div>
+            <button
+              style={mr}
+              onClick={() => {
+                setShowAdd((s) => !s);
+                setShowEdit(false);
+              }}
+            >
+              add
+            </button>
+            <button
+              style={mr}
+              onClick={() => {
+                setShowEdit((s) => !s);
+                setShowAdd(false);
+              }}
+            >
+              edit
+            </button>
+            <button
+              onClick={() => {
+                setShowEdit((s) => !s);
+                setShowAdd(false);
+                setShowEdit(false)
+                categoriesState.categorySelectClear();
+              }}
+            >
+              reset
+            </button>
+          </div>
         </div>
       )}
       {showAdd && <CategoryForm />}
@@ -54,12 +84,12 @@ const Category: React.FC<{
   showEdit: boolean;
 }> = ({
   category,
-  categoriesState: { categoryEdit, categoryEditCancel, categorySelect },
+  categoriesState: { categoryEdit, categoryEditClear, categorySelect },
   showEdit,
 }) => {
   useEffect(() => {
     if (!showEdit) {
-      categoryEditCancel();
+      categoryEditClear();
     }
   }, [showEdit]);
 
@@ -87,7 +117,7 @@ const Category: React.FC<{
       {showEdit && category.editing && (
         <CategoryForm
           category={category}
-          categoryEditCancel={categoryEditCancel}
+          categoryEditClear={categoryEditClear}
         />
       )}
     </div>

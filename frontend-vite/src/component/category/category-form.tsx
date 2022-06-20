@@ -11,7 +11,7 @@ import {
 
 export const CategoryForm: React.FC<{
   category?: Category;
-  categoryEditCancel?: () => void;
+  categoryEditClear?: () => void;
 }> = (p) => {
   const { description, title, reset, setDescription, setTitle } =
     useCategoryFormState();
@@ -44,8 +44,8 @@ export const CategoryForm: React.FC<{
     }
     console.log(res);
     if (!res.error) {
-      if (p.categoryEditCancel) {
-        p.categoryEditCancel();
+      if (p.categoryEditClear) {
+        p.categoryEditClear();
       }
       reset();
     } else {

@@ -1,12 +1,12 @@
 import crypto from 'crypto';
-import model from '../model';
+import model, { CategoryClass } from '../model';
 import { Context } from './context';
 import { gql } from 'apollo-server-lambda';
 
 export const categoryCreate = {
   typeDef: gql`
     type Mutation {
-      categoryCreate(title: String!, description: String): Category!
+      categoryCreate(title: String!, description: String!): Category!
     }
   `,
   resolver: {
@@ -15,7 +15,7 @@ export const categoryCreate = {
         _: any,
         { description, title }: { description?: string; title: string },
         { userId }: Context
-      ) => {
+      ): Promise<CategoryClass> => {
         const response = await model.category.create({
           pk: `user:${userId}`,
           sk: `category:${crypto.randomUUID()}`,

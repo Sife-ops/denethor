@@ -17,7 +17,6 @@ export const Dev3: React.FC = () => {
 
   return (
     <div>
-      <h1>Categories</h1>
       <Categories categoriesState={categoriesState} type={'categoryList'} />
     </div>
   );
