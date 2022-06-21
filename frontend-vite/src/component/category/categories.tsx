@@ -24,6 +24,7 @@ export const Categories: React.FC<{
       {type === 'categoryList' && (
         <div
           style={{
+            ...mrb,
             display: 'flex',
             alignItems: 'center',
           }}
@@ -50,10 +51,9 @@ export const Categories: React.FC<{
             </button>
             <button
               onClick={() => {
-                setShowEdit((s) => !s);
-                setShowAdd(false);
-                setShowEdit(false)
                 categoriesState.categorySelectClear();
+                setShowAdd(false);
+                setShowEdit(false);
               }}
             >
               reset

@@ -13,14 +13,14 @@ export const categoryCreate = {
     Mutation: {
       categoryCreate: async (
         _: any,
-        { description, title }: { description?: string; title: string },
+        { description, title }: { description: string; title: string },
         { userId }: Context
       ): Promise<CategoryClass> => {
         const response = await model.category.create({
           pk: `user:${userId}`,
           sk: `category:${crypto.randomUUID()}`,
-          title,
           description,
+          title,
         });
 
         console.log('create', response);

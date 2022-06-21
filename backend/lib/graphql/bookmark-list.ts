@@ -22,6 +22,8 @@ export const bookmarkList = {
           .beginsWith('bookmark:')
           .exec();
 
+        console.log('bookmark list', bookmarks);
+
         return bookmarks;
       },
     },
