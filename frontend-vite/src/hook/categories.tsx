@@ -16,22 +16,33 @@ export interface CategoriesState {
   setCategories: React.Dispatch<React.SetStateAction<CategoryUI[]>>;
 }
 
-export const useCategoriesState = (): CategoriesState => {
+export const useCategoriesState = (): // categories?: Category[]
+CategoriesState => {
   const [categories, setCategories] = useState<CategoryUI[]>([]);
 
-  const categoriesUpdate = (categories: Category[]) => {
+  // if (categories) {
+  //   setCategoriesState(
+  //     categories.map((e) => ({
+  //       ...e,
+  //       selected: false,
+  //       editing: false,
+  //     }))
+  //   );
+  // }
+
+  const categoriesUpdate = (categoriesState: Category[]) => {
     setCategories((state) => {
-      return categories.map((category) => {
-        const found = state.find((c) => c.sk === category.sk);
+      return categoriesState.map((e) => {
+        const found = state.find((f) => f.sk === e.sk);
         if (found) {
           return {
-            ...category,
+            ...e,
             selected: found.selected,
             editing: found.editing,
           };
         } else {
           return {
-            ...category,
+            ...e,
             selected: false,
             editing: false,
           };

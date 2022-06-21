@@ -1,6 +1,7 @@
 import { Categories } from '../category/categories';
-import { useCategoriesState } from '../../hook/categories';
-import { useEffect, useState } from 'react';
+import { useBookmarksState, BookmarksState } from '../../hook/bookmarks';
+import { useCategoriesState, CategoriesState } from '../../hook/categories';
+import { useEffect } from 'react';
 
 import {
   useCategoryListQuery,
@@ -13,7 +14,7 @@ export const Dev3: React.FC = () => {
   const [bookmarkListRes] = useBookmarkListQuery();
 
   const categoriesState = useCategoriesState();
-  const [bookmarks, setBookmarks] = useState<BookmarkType[]>([]);
+  const bookmarksState = useBookmarksState();
 
   useEffect(() => {
     const { fetching, data } = categoryListRes;
@@ -25,7 +26,7 @@ export const Dev3: React.FC = () => {
   useEffect(() => {
     const { fetching, data } = bookmarkListRes;
     if (!fetching && data) {
-      setBookmarks(data.bookmarkList);
+      bookmarksState.bookmarksUpdate(data.bookmarkList);
     }
   }, [bookmarkListRes.data]);
 
@@ -39,7 +40,10 @@ export const Dev3: React.FC = () => {
       {bookmarkListRes.fetching ? (
         <Loading />
       ) : (
-        <Bookmarks bookmarks={bookmarks} />
+        <Bookmarks
+          bookmarksState={bookmarksState}
+          categoriesState={categoriesState}
+        />
       )}
     </div>
   );
@@ -50,25 +54,66 @@ const Loading: React.FC = () => {
   return <div>Loading...</div>;
 };
 
-const Bookmark: React.FC<{ bookmark: BookmarkType }> = (p) => {
+const Bookmark: React.FC<{
+  bookmark: BookmarkType;
+  categoriesState: CategoriesState;
+}> = ({ categoriesState, bookmark }) => {
+  const bookmarkCategoriesState = useCategoriesState();
+
+  useEffect(() => {
+    if (bookmark.categories) {
+      bookmarkCategoriesState.setCategories(
+        categoriesState.categories.map((e) => {
+          if (bookmark.categories?.find((f) => f.sk === e.sk)) {
+            return {
+              ...e,
+              selected: true,
+            };
+          } else {
+            return {
+              ...e,
+              selected: false,
+            };
+          }
+        })
+      );
+    }
+  }, [categoriesState.categories]);
+
   return (
-    //
-    <div>{p.bookmark.title}</div>
+    <div>
+      <div>title: {bookmark.title}</div>
+      <div>description: {bookmark.description || 'none'}</div>
+      <div>url: {bookmark.url}</div>
+      <div>
+        <div>categories</div>
+        <Categories
+          categoriesState={bookmarkCategoriesState}
+          type={'bookmarkCategoryList'}
+        />
+      </div>
+      <button>edit</button>
+      <br />
+    </div>
   );
 };
 
-const Bookmarks: React.FC<{ bookmarks: BookmarkType[] }> = (p) => {
-  if (p.bookmarks.length < 1) {
-    return (
-      //
-      <div>no bookmarks</div>
-    );
+const Bookmarks: React.FC<{
+  bookmarksState: BookmarksState;
+  categoriesState: CategoriesState;
+}> = ({ bookmarksState: { bookmarks }, categoriesState }) => {
+  if (bookmarks.length < 1) {
+    return <div>no bookmarks</div>;
   }
 
   return (
     <div>
-      {p.bookmarks.map((bookmark) => (
-        <Bookmark key={bookmark.sk} bookmark={bookmark} />
+      {bookmarks.map((bookmark) => (
+        <Bookmark
+          key={bookmark.sk}
+          bookmark={bookmark}
+          categoriesState={categoriesState}
+        />
       ))}
     </div>
   );
